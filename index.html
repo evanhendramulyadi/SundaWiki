@@ -890,6 +890,14 @@
       min-height: 380px;
     }
 
+    @media (max-width: 760px) {
+      .baduy-img {
+        min-height: 260px;
+        height: 260px;
+        flex-shrink: 0;
+      }
+    }
+
     .baduy-img img {
       width: 100%;
       height: 100%;
@@ -943,7 +951,7 @@
     .baduy-five {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      border-top: 1px solid rgba(201, 151, 59, .12);
+      border-top: 1px solid rgba(201, 151, 59, .18);
     }
 
     @media (max-width: 580px) {
@@ -955,12 +963,24 @@
     .bf-cell {
       padding: 1.3rem .8rem;
       text-align: center;
-      border-right: 1px solid rgba(201, 151, 59, .1);
+      border-right: 1px solid rgba(201, 151, 59, .18);
+      border-bottom: 1px solid rgba(201, 151, 59, .18);
       transition: background .25s;
     }
 
-    .bf-cell:last-child {
-      border-right: none;
+    @media (min-width: 581px) {
+      .bf-cell:last-child {
+        border-right: none;
+      }
+      .bf-cell {
+        border-bottom: none;
+      }
+    }
+
+    @media (max-width: 580px) {
+      .bf-cell:nth-child(3n) {
+        border-right: none;
+      }
     }
 
     .bf-cell:hover {
@@ -1450,9 +1470,9 @@
   <div class="nilai-wrap" id="cageur">
     <div class="nilai-panel rev">
       <div class="np-img">
-        <!-- Sundanese herbal medicine / jamu / natural herbs -->
-        <img src="https://images.unsplash.com/photo-1587116861555-90e89ce2b5dc?w=900&q=80"
-          alt="Traditional Sundanese herbal medicine ingredients including turmeric, ginger, and lemongrass" />
+        <!-- Tropical nature / green forest wellness - Cageur -->
+        <img src="https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=900&q=80"
+          alt="Sunlight filtering through lush tropical forest representing the Sundanese value of cageur and harmony with nature" />
         <div class="np-num">01</div>
       </div>
       <div class="np-body">
@@ -1548,9 +1568,9 @@
   <div class="nilai-wrap" id="bener">
     <div class="nilai-panel rev">
       <div class="np-img">
-        <!-- Traditional Sundanese adat / ceremony / elder wisdom -->
-        <img src="https://images.unsplash.com/photo-1604608672516-5fb8c3e4f70f?w=900&q=80"
-          alt="Sundanese traditional elder performing an adat ceremony representing honesty and moral guidance" />
+        <!-- Clear mountain water / natural honesty / bener -->
+        <img src="https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=900&q=80"
+          alt="A serene Indonesian mountain landscape at dawn representing clarity, truth, and the Sundanese value of bener" />
         <div class="np-num">03</div>
       </div>
       <div class="np-body">
