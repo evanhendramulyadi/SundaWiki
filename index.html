@@ -1,2038 +1,265 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SundaWiki</title>
-  <link rel="icon" type="image/png" href="img/logo-sundawiki.png">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lora:ital,wght@0,400;0,600;1,400&family=Josefin+Sans:wght@300;400;600&display=swap"
-    rel="stylesheet" />
-  <style>
-    /* =========================================
-   VARIABLES
-========================================= */
-    :root {
-      --bg: #160e05;
-      --bg2: #1f1408;
-      --bg3: #28190b;
-      --earth: #3a2210;
-      --copper: #a8621f;
-      --gold: #c9973b;
-      --gold-lt: #e8c06a;
-      --sand: #e0cba0;
-      --cream: #f4ead6;
-      --mist: #c0b49a;
-      --moss: #253d25;
-      --leaf: #3d6b3d;
-      --leaf-lt: #5a9b5a;
-      --red: #7a2515;
-      --nav-h: 60px;
-    }
-
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Lora', serif;
-      background: var(--bg);
-      color: var(--cream);
-      overflow-x: hidden;
-    }
-
-    /* =========================================
-   TYPOGRAPHY HELPERS
-========================================= */
-    .label {
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: .6rem;
-      letter-spacing: .35em;
-      text-transform: uppercase;
-      color: var(--copper);
-    }
-
-    .divider {
-      width: 80px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      margin: 1.2rem auto;
-    }
-
-    /* =========================================
-   LANGUAGE SWITCHER
-========================================= */
-    .lang-switcher {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      border: 1px solid rgba(201, 151, 59, .3);
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-
-    .lang-btn {
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: .55rem;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: var(--mist);
-      background: none;
-      border: none;
-      padding: .38rem .7rem;
-      cursor: pointer;
-      transition: background .2s, color .2s;
-      white-space: nowrap;
-      border-right: 1px solid rgba(201, 151, 59, .3);
-    }
-
-    .lang-btn:last-child {
-      border-right: none;
-    }
-
-    .lang-btn.active {
-      background: rgba(201, 151, 59, .18);
-      color: var(--gold-lt);
-    }
-
-    .lang-btn:hover:not(.active) {
-      background: rgba(201, 151, 59, .08);
-      color: var(--sand);
-    }
-
-    /* =========================================
-   NAVBAR — DESKTOP ONLY
-   hamburger — MOBILE ONLY
-========================================= */
-    #navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: var(--nav-h);
-      z-index: 200;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2.5rem;
-      transition: background .4s, box-shadow .4s;
-    }
-
-    #navbar.scrolled {
-      background: rgba(22, 14, 5, .95);
-      backdrop-filter: blur(14px);
-      box-shadow: 0 1px 0 rgba(201, 151, 59, .15);
-    }
-
-    .nav-brand {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: 1.05rem;
-      color: var(--gold);
-      text-decoration: none;
-      white-space: nowrap;
-    }
-
-    /* Desktop links */
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 1.6rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: .65rem;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: var(--mist);
-      text-decoration: none;
-      transition: color .2s;
-      white-space: nowrap;
-    }
-
-    .nav-links a:hover {
-      color: var(--gold-lt);
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 1.6rem;
-    }
-
-    /* Hamburger button — hidden on desktop */
-    #hamBtn {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      gap: 5px;
-      width: 40px;
-      height: 40px;
-      background: none;
-      border: 1px solid rgba(201, 151, 59, .3);
-      cursor: pointer;
-      padding: 8px;
-      flex-shrink: 0;
-    }
-
-    #hamBtn span {
-      display: block;
-      width: 100%;
-      height: 2px;
-      background: var(--gold);
-      border-radius: 2px;
-      transition: transform .3s ease, opacity .3s ease;
-    }
-
-    #hamBtn.open span:nth-child(1) {
-      transform: translateY(7px) rotate(45deg);
-    }
-
-    #hamBtn.open span:nth-child(2) {
-      opacity: 0;
-      transform: scaleX(0);
-    }
-
-    #hamBtn.open span:nth-child(3) {
-      transform: translateY(-7px) rotate(-45deg);
-    }
-
-    /* Mobile drawer */
-    #mobileDrawer {
-      position: fixed;
-      top: var(--nav-h);
-      left: 0;
-      right: 0;
-      background: rgba(22, 14, 5, .98);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(201, 151, 59, .2);
-      z-index: 199;
-      overflow: hidden;
-      max-height: 0;
-      transition: max-height .4s cubic-bezier(.4, 0, .2, 1);
-    }
-
-    #mobileDrawer.open {
-      max-height: 480px;
-    }
-
-    .drawer-inner {
-      padding: 1.5rem 2rem 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
-    .drawer-inner a {
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: .85rem;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: var(--mist);
-      text-decoration: none;
-      padding: .9rem 0;
-      border-bottom: 1px solid rgba(201, 151, 59, .1);
-      display: flex;
-      align-items: center;
-      gap: .8rem;
-      transition: color .2s, padding-left .2s;
-    }
-
-    .drawer-inner a:last-child {
-      border-bottom: none;
-    }
-
-    .drawer-inner a:hover {
-      color: var(--gold-lt);
-      padding-left: .4rem;
-    }
-
-    .drawer-inner a .d-icon {
-      font-size: 1rem;
-      width: 22px;
-      text-align: center;
-      flex-shrink: 0;
-    }
-
-    .drawer-lang {
-      display: flex;
-      align-items: center;
-      gap: .8rem;
-      padding: 1rem 0;
-      border-bottom: 1px solid rgba(201, 151, 59, .1);
-    }
-
-    .drawer-lang .d-icon {
-      font-size: 1rem;
-      width: 22px;
-      text-align: center;
-      flex-shrink: 0;
-    }
-
-    .drawer-lang .lang-switcher {
-      margin-left: 0;
-    }
-
-    .drawer-lang .lang-btn {
-      font-size: .7rem;
-      padding: .4rem .9rem;
-    }
-
-    /* RESPONSIVE BREAKPOINT */
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-      }
-
-      .nav-right .lang-switcher {
-        display: none;
-      }
-
-      #hamBtn {
-        display: flex;
-      }
-    }
-
-    @media (min-width: 769px) {
-      #mobileDrawer {
-        display: none;
-      }
-
-      #hamBtn {
-        display: none;
-      }
-    }
-
-    /* =========================================
-   HERO
-========================================= */
-    #hero {
-      position: relative;
-      min-height: 100svh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      /* Sundanese landscape - rice terraces West Java */
-      background: url('https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=1800&q=85') center/cover no-repeat;
-      filter: brightness(.3) saturate(1.4) sepia(.4);
-      animation: hzoom 28s ease-in-out infinite alternate;
-    }
-
-    @keyframes hzoom {
-      from {
-        transform: scale(1);
-      }
-
-      to {
-        transform: scale(1.1);
-      }
-    }
-
-    .hero-veil {
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(180deg, rgba(22, 14, 5, .6) 0%, rgba(37, 61, 37, .15) 50%, rgba(22, 14, 5, .92) 100%);
-    }
-
-    /* batik stripe accents */
-    .hero-stripe-t,
-    .hero-stripe-b {
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 5px;
-      z-index: 3;
-      background: repeating-linear-gradient(90deg,
-          var(--gold) 0, var(--gold) 6px,
-          transparent 6px, transparent 12px,
-          var(--copper) 12px, var(--copper) 18px,
-          transparent 18px, transparent 24px);
-    }
-
-    .hero-stripe-t {
-      top: var(--nav-h);
-    }
-
-    .hero-stripe-b {
-      bottom: 0;
-    }
-
-    .hero-inner {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      padding: calc(var(--nav-h) + 4rem) 1.5rem 5rem;
-      max-width: 860px;
-      width: 100%;
-    }
-
-    .hero-eyebrow {
-      display: inline-block;
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: .6rem;
-      letter-spacing: .4em;
-      text-transform: uppercase;
-      color: var(--gold);
-      border: 1px solid rgba(201, 151, 59, .35);
-      padding: .4rem 1.5rem;
-      margin-bottom: 2rem;
-      opacity: 0;
-      animation: fadeUp .8s .3s forwards;
-    }
-
-    .hero-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.8rem, 9vw, 6.5rem);
-      line-height: 1.05;
-      color: var(--cream);
-      opacity: 0;
-      animation: fadeUp .9s .55s forwards;
-    }
-
-    .hero-title em {
-      color: var(--gold);
-      font-style: italic;
-    }
-
-    .hero-sub {
-      margin-top: 1.8rem;
-      font-size: clamp(.95rem, 2.3vw, 1.2rem);
-      color: var(--mist);
-      font-style: italic;
-      line-height: 1.85;
-      opacity: 0;
-      animation: fadeUp .9s .8s forwards;
-    }
-
-    .hero-pills {
-      margin-top: 2.8rem;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: .6rem;
-      opacity: 0;
-      animation: fadeUp .8s 1.05s forwards;
-    }
-
-    .pill {
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: .65rem;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: var(--sand);
-      background: rgba(201, 151, 59, .08);
-      border: 1px solid rgba(201, 151, 59, .25);
-      padding: .4rem 1.1rem;
-    }
-
-    .scroll-cue {
-      position: absolute;
-      bottom: 2.2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 3;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: .5rem;
-      opacity: 0;
-      animation: fadeIn 1s 1.6s forwards;
-    }
-
-    .scroll-cue span {
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: .55rem;
-      letter-spacing: .25em;
-      color: var(--gold);
-      text-transform: uppercase;
-    }
-
-    .scroll-cue .dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--gold);
-      animation: bob 1.8s ease-in-out infinite;
-    }
-
-    @keyframes bob {
-
-      0%,
-      100% {
-        transform: translateY(0);
-        opacity: 1;
-      }
-
-      50% {
-        transform: translateY(9px);
-        opacity: .3;
-      }
-    }
-
-    /* =========================================
-   BANTEN INTRO BAND
-========================================= */
-    #banten {
-      background: var(--bg3);
-      position: relative;
-      padding: 5rem 1.5rem;
-    }
-
-    #banten::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, var(--copper), var(--gold), var(--copper), transparent);
-    }
-
-    .banten-grid {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: center;
-    }
-
-    @media (max-width: 760px) {
-      .banten-grid {
-        grid-template-columns: 1fr;
-        gap: 3rem;
-      }
-    }
-
-    .banten-txt .label {
-      margin-bottom: 1rem;
-      display: block;
-    }
-
-    .banten-txt h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.8rem, 4.5vw, 2.8rem);
-      color: var(--gold);
-      line-height: 1.25;
-      margin-bottom: 1.4rem;
-    }
-
-    .banten-txt p {
-      font-size: 1rem;
-      line-height: 1.95;
-      color: var(--mist);
-      margin-bottom: 1rem;
-    }
-
-    .banten-txt p strong {
-      color: var(--sand);
-    }
-
-    .banten-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      margin-top: 2rem;
-      border: 1px solid rgba(201, 151, 59, .12);
-    }
-
-    .bstat {
-      padding: 1.2rem .8rem;
-      text-align: center;
-      border-right: 1px solid rgba(201, 151, 59, .12);
-    }
-
-    .bstat:last-child {
-      border-right: none;
-    }
-
-    .bstat .n {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
-      color: var(--gold);
-    }
-
-    .bstat .l {
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: .55rem;
-      letter-spacing: .14em;
-      color: var(--mist);
-      text-transform: uppercase;
-      margin-top: .3rem;
-    }
-
-    .banten-img {
-      position: relative;
-    }
-
-    .banten-img img {
-      width: 100%;
-      height: 420px;
-      object-fit: cover;
-      filter: brightness(.65) saturate(1.3) sepia(.25);
-      display: block;
-    }
-
-    @media (max-width: 760px) {
-      .banten-img img {
-        height: 260px;
-      }
-    }
-
-    .banten-img::after {
-      content: '';
-      position: absolute;
-      inset: 12px -12px -12px 12px;
-      border: 1px solid rgba(201, 151, 59, .2);
-      z-index: -1;
-    }
-
-    /* =========================================
-   SECTION INTRO
-========================================= */
-    .sec-intro {
-      text-align: center;
-      padding: 6rem 1.5rem 3.5rem;
-      max-width: 680px;
-      margin: 0 auto;
-    }
-
-    .sec-intro h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.9rem, 5vw, 3.2rem);
-      color: var(--gold);
-      line-height: 1.2;
-      margin: .8rem 0 1rem;
-    }
-
-    .sec-intro p {
-      font-size: 1rem;
-      line-height: 1.85;
-      color: var(--mist);
-      font-style: italic;
-    }
-
-    /* =========================================
-   NILAI — ALTERNATING PANELS
-========================================= */
-    .nilai-wrap {
-      padding: 0 1rem 4px;
-    }
-
-    .nilai-panel {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 520px;
-      border: 1px solid rgba(201, 151, 59, .1);
-      overflow: hidden;
-      background: var(--bg2);
-      transition: border-color .35s;
-    }
-
-    .nilai-panel:hover {
-      border-color: rgba(201, 151, 59, .3);
-    }
-
-    .nilai-panel.flip {
-      direction: rtl;
-    }
-
-    .nilai-panel.flip>* {
-      direction: ltr;
-    }
-
-    @media (max-width: 760px) {
-
-      .nilai-panel,
-      .nilai-panel.flip {
-        grid-template-columns: 1fr;
-        direction: ltr;
-        min-height: auto;
-      }
-    }
-
-    /* image side */
-    .np-img {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .np-img img {
-      width: 100%;
-      height: 100%;
-      min-height: 300px;
-      object-fit: cover;
-      filter: brightness(.55) saturate(1.3) sepia(.2);
-      transition: transform .7s ease, filter .4s;
-    }
-
-    .nilai-panel:hover .np-img img {
-      transform: scale(1.06);
-      filter: brightness(.7) saturate(1.5) sepia(.08);
-    }
-
-    .np-num {
-      position: absolute;
-      bottom: 1.2rem;
-      right: 1.4rem;
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: 7rem;
-      line-height: 1;
-      color: rgba(201, 151, 59, .12);
-      pointer-events: none;
-      user-select: none;
-    }
-
-    /* text side */
-    .np-body {
-      padding: 3rem 2.8rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    @media (max-width: 480px) {
-      .np-body {
-        padding: 2rem 1.4rem;
-      }
-    }
-
-    .np-body .label {
-      margin-bottom: .8rem;
-      display: block;
-    }
-
-    .np-body h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      color: var(--cream);
-      line-height: 1;
-      margin-bottom: .3rem;
-    }
-
-    .np-arti {
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: .68rem;
-      letter-spacing: .22em;
-      color: var(--gold);
-      text-transform: uppercase;
-      margin-bottom: 1.6rem;
-      padding-bottom: 1.4rem;
-      border-bottom: 1px solid rgba(201, 151, 59, .18);
-    }
-
-    .np-body p {
-      font-size: .97rem;
-      line-height: 1.95;
-      color: var(--mist);
-      margin-bottom: 1rem;
-    }
-
-    .np-body p strong {
-      color: var(--sand);
-    }
-
-    /* Banten connection box */
-    .banten-link {
-      margin-top: .8rem;
-      padding: 1.1rem 1.3rem;
-      background: rgba(37, 61, 37, .4);
-      border-left: 3px solid var(--leaf-lt);
-    }
-
-    .banten-link .bl-label {
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: .55rem;
-      letter-spacing: .25em;
-      text-transform: uppercase;
-      color: var(--leaf-lt);
-      margin-bottom: .6rem;
-      display: flex;
-      align-items: center;
-      gap: .5rem;
-    }
-
-    .banten-link p {
-      font-size: .88rem;
-      line-height: 1.8;
-      color: var(--sand);
-      margin: 0;
-    }
-
-    .np-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .4rem;
-      margin-top: 1.3rem;
-    }
-
-    .chip {
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: .57rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--mist);
-      background: rgba(201, 151, 59, .06);
-      border: 1px solid rgba(201, 151, 59, .18);
-      padding: .28rem .8rem;
-    }
-
-    /* =========================================
-   QUOTE BAND
-========================================= */
-    #quote {
-      background: var(--moss);
-      position: relative;
-      overflow: hidden;
-      padding: 6rem 1.5rem;
-      text-align: center;
-    }
-
-    #quote::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(37, 61, 37, .9), rgba(22, 14, 5, .7));
-    }
-
-    #quote::after {
-      content: '"';
-      position: absolute;
-      top: -2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: 'Playfair Display', serif;
-      font-size: 20rem;
-      line-height: 1;
-      color: rgba(201, 151, 59, .06);
-      pointer-events: none;
-    }
-
-    .quote-inner {
-      position: relative;
-      z-index: 2;
-      max-width: 720px;
-      margin: 0 auto;
-    }
-
-    .quote-inner blockquote {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: clamp(1.2rem, 3.5vw, 1.85rem);
-      color: var(--cream);
-      line-height: 1.75;
-      margin-bottom: 1.5rem;
-    }
-
-    .quote-inner blockquote em {
-      color: var(--gold-lt);
-    }
-
-    .quote-inner cite {
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: .62rem;
-      letter-spacing: .28em;
-      text-transform: uppercase;
-      color: var(--mist);
-      font-style: normal;
-    }
-
-    /* =========================================
-   BADUY SECTION
-========================================= */
-    #baduy {
-      padding: 0 1rem 6rem;
-    }
-
-    .baduy-card {
-      max-width: 1100px;
-      margin: 0 auto;
-      border: 1px solid rgba(201, 151, 59, .13);
-      overflow: hidden;
-      background: var(--bg2);
-    }
-
-    .baduy-top {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
-
-    @media (max-width: 760px) {
-      .baduy-top {
-        grid-template-columns: 1fr;
-        display: flex;
-        flex-direction: column;
-      }
-    }
-
-    .baduy-img {
-      overflow: hidden;
-      min-height: 380px;
-    }
-
-    @media (max-width: 760px) {
-      .baduy-img {
-        min-height: 260px;
-        height: 260px;
-        flex-shrink: 0;
-      }
-    }
-
-    .baduy-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: brightness(.55) saturate(1.2) sepia(.3);
-      transition: transform .6s ease;
-      display: block;
-    }
-
-    .baduy-card:hover .baduy-img img {
-      transform: scale(1.04);
-    }
-
-    .baduy-txt {
-      padding: 3rem 2.5rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    @media (max-width: 480px) {
-      .baduy-txt {
-        padding: 2rem 1.4rem;
-      }
-    }
-
-    .baduy-txt .label {
-      margin-bottom: .9rem;
-      display: block;
-    }
-
-    .baduy-txt h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.6rem, 4vw, 2.5rem);
-      color: var(--gold);
-      margin-bottom: 1.2rem;
-      line-height: 1.25;
-    }
-
-    .baduy-txt p {
-      font-size: .97rem;
-      line-height: 1.9;
-      color: var(--mist);
-      margin-bottom: .9rem;
-    }
-
-    .baduy-txt p strong {
-      color: var(--sand);
-    }
-
-    .baduy-five {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      border-top: 1px solid rgba(201, 151, 59, .18);
-    }
-
-    @media (max-width: 580px) {
-      .baduy-five {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    .bf-cell {
-      padding: 1.3rem .8rem;
-      text-align: center;
-      border-right: 1px solid rgba(201, 151, 59, .18);
-      border-bottom: 1px solid rgba(201, 151, 59, .18);
-      transition: background .25s;
-    }
-
-    @media (min-width: 581px) {
-      .bf-cell:last-child {
-        border-right: none;
-      }
-      .bf-cell {
-        border-bottom: none;
-      }
-    }
-
-    @media (max-width: 580px) {
-      .bf-cell:nth-child(3n) {
-        border-right: none;
-      }
-    }
-
-    .bf-cell:hover {
-      background: rgba(201, 151, 59, .07);
-    }
-
-    .bf-icon {
-      font-size: 1.6rem;
-      margin-bottom: .4rem;
-    }
-
-    .bf-name {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: .95rem;
-      color: var(--gold);
-      margin-bottom: .2rem;
-    }
-
-    .bf-sub {
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: .52rem;
-      letter-spacing: .1em;
-      color: var(--mist);
-      text-transform: uppercase;
-    }
-
-    /* =========================================
-   SUMMARY TABLE
-========================================= */
-    #ringkasan {
-      padding: 0 1rem 6rem;
-    }
-
-    .table-wrap {
-      max-width: 960px;
-      margin: 0 auto;
-      border: 1px solid rgba(201, 151, 59, .12);
-      overflow: hidden;
-    }
-
-    .trow {
-      display: grid;
-      grid-template-columns: 110px 1fr 1fr;
-      border-bottom: 1px solid rgba(201, 151, 59, .08);
-      transition: background .2s;
-    }
-
-    .trow:last-child {
-      border-bottom: none;
-    }
-
-    .trow:hover {
-      background: rgba(201, 151, 59, .04);
-    }
-
-    .trow.thead {
-      background: rgba(201, 151, 59, .06);
-    }
-
-    @media (max-width: 580px) {
-      .trow {
-        grid-template-columns: 80px 1fr;
-      }
-
-      .trow .tc:last-child {
-        display: none;
-      }
-    }
-
-    .tc {
-      padding: 1.4rem 1.2rem;
-      border-right: 1px solid rgba(201, 151, 59, .08);
-      font-size: .9rem;
-      line-height: 1.75;
-      color: var(--mist);
-    }
-
-    .tc:last-child {
-      border-right: none;
-    }
-
-    .tc.label-cell {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      gap: .4rem;
-    }
-
-    .tc.label-cell .ticon {
-      font-size: 1.5rem;
-    }
-
-    .tc.label-cell .tname {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: 1rem;
-      color: var(--gold);
-    }
-
-    .thead .tc {
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: .58rem;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      color: var(--copper);
-      font-style: normal;
-    }
-
-    .tc strong {
-      color: var(--sand);
-    }
-
-    /* =========================================
-   GALLERY
-========================================= */
-    #galeri {
-      padding: 0 0 6rem;
-    }
-
-    .gallery-mosaic {
-      display: grid;
-      gap: 3px;
-    }
-
-    @media (min-width: 769px) {
-      .gallery-mosaic {
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: 280px 280px;
-      }
-
-      .gm-1 {
-        grid-column: 1;
-        grid-row: 1;
-      }
-
-      .gm-2 {
-        grid-column: 2;
-        grid-row: 1;
-      }
-
-      .gm-3 {
-        grid-column: 3;
-        grid-row: 1 / 3;
-      }
-
-      .gm-4 {
-        grid-column: 1;
-        grid-row: 2;
-      }
-
-      .gm-5 {
-        grid-column: 2;
-        grid-row: 2;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .gallery-mosaic {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .gallery-mosaic>div {
-        height: 190px;
-      }
-    }
-
-    @media (max-width: 420px) {
-      .gallery-mosaic {
-        grid-template-columns: 1fr;
-      }
-
-      .gallery-mosaic>div {
-        height: 210px;
-      }
-    }
-
-    .gm {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .gm img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: brightness(.6) saturate(1.3) sepia(.2);
-      transition: transform .6s ease, filter .4s;
-      display: block;
-    }
-
-    .gm:hover img {
-      transform: scale(1.07);
-      filter: brightness(.8) saturate(1.5) sepia(.05);
-    }
-
-    .gm-cap {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 2.5rem 1rem .8rem;
-      background: linear-gradient(transparent, rgba(22, 14, 5, .88));
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: .58rem;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: var(--mist);
-      opacity: 0;
-      transition: opacity .3s;
-    }
-
-    .gm:hover .gm-cap {
-      opacity: 1;
-    }
-
-    /* =========================================
-   FOOTER
-========================================= */
-    footer {
-      background: #0e0904;
-      border-top: 1px solid rgba(201, 151, 59, .12);
-      padding: 4rem 1.5rem 2.5rem;
-      text-align: center;
-    }
-
-    .footer-brand {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: 1.5rem;
-      color: var(--gold);
-      margin-bottom: .4rem;
-    }
-
-    .footer-tagline {
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: .58rem;
-      letter-spacing: .3em;
-      text-transform: uppercase;
-      color: var(--copper);
-      margin-bottom: 2rem;
-    }
-
-    .footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: .4rem 1.8rem;
-      margin-bottom: 2.5rem;
-    }
-
-    .footer-links a {
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: .6rem;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: var(--mist);
-      text-decoration: none;
-      transition: color .2s;
-    }
-
-    .footer-links a:hover {
-      color: var(--gold);
-    }
-
-    .footer-copy {
-      font-size: .82rem;
-      color: rgba(192, 180, 154, .3);
-      line-height: 1.9;
-    }
-
-    /* =========================================
-   SCROLL REVEAL
-========================================= */
-    .rev {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity .7s ease, transform .7s ease;
-    }
-
-    .rev.on {
-      opacity: 1;
-      transform: none;
-    }
-
-    .rev-l {
-      opacity: 0;
-      transform: translateX(-35px);
-      transition: opacity .7s ease, transform .7s ease;
-    }
-
-    .rev-l.on {
-      opacity: 1;
-      transform: none;
-    }
-
-    .rev-r {
-      opacity: 0;
-      transform: translateX(35px);
-      transition: opacity .7s ease, transform .7s ease;
-    }
-
-    .rev-r.on {
-      opacity: 1;
-      transform: none;
-    }
-
-    /* =========================================
-   KEYFRAMES
-========================================= */
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(28px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    /* =========================================
-   NILAI SECTION SPACING FIX
-========================================= */
-    .nilai-section-gap {
-      height: 4px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SundaWiki - Spiritualitas Sunda</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #d4a373;
+            --light: #fefae0;
+            --dark: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            line-height: 1.6;
+            color: var(--dark);
+        }
+
+        /* --- Navbar --- */
+        nav {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: white;
+        }
+
+        .translate-btn {
+            background: var(--accent);
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        /* --- Hero Section --- */
+        header {
+            text-align: center;
+            padding: 60px 10%;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1590022413150-13459e999905?auto=format&fit=crop&q=80&w=1000') no-repeat center/cover;
+            color: white;
+        }
+
+        /* --- Content Sections --- */
+        section {
+            padding: 40px 10%;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-top: 5px solid var(--accent);
+        }
+
+        .baduy-section {
+            background: #e9edc9;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        footer {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        /* --- Mobile Responsive --- */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: var(--primary);
+                padding: 20px;
+                text-align: center;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+        }
+    </style>
 </head>
-
 <body>
 
-  <!-- ═══ NAVBAR ═══════════════════════════════════════════ -->
-  <nav id="navbar">
-    <a class="nav-brand" href="#hero">SundaWiki</a>
-
-    <!-- Desktop links -->
-    <ul class="nav-links">
-      <li><a href="#banten" data-en="Introduction" data-id="Pengantar">Introduction</a></li>
-      <li><a href="#cageur">Cageur</a></li>
-      <li><a href="#bageur">Bageur</a></li>
-      <li><a href="#bener">Bener</a></li>
-      <li><a href="#pinter">Pinter</a></li>
-      <li><a href="#singer">Singer</a></li>
-      <li><a href="#baduy" data-en="Baduy" data-id="Baduy">Baduy</a></li>
-      <li><a href="#kesimpulan" data-en="Conclusion" data-id="Kesimpulan">Conclusion</a></li>
-    </ul>
-
-    <div class="nav-right">
-      <!-- Language Switcher -->
-      <div class="lang-switcher">
-        <button class="lang-btn active" data-lang="en">EN</button>
-        <button class="lang-btn" data-lang="id">ID</button>
-      </div>
-
-      <!-- Mobile hamburger -->
-      <button id="hamBtn" aria-label="Open menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- Mobile drawer -->
-  <div id="mobileDrawer">
-    <div class="drawer-inner">
-      <div class="drawer-lang">
-        <span class="d-icon">🌐</span>
-        <div class="lang-switcher">
-          <button class="lang-btn active" data-lang="en">EN</button>
-          <button class="lang-btn" data-lang="id">ID</button>
+    <nav>
+        <div class="logo">SundaWiki</div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#filosofi">Filosofi</a></li>
+            <li><a href="#pancaniti">5 Prinsip</a></li>
+            <li><a href="#baduy">Suku Baduy</a></li>
+            <li><button class="translate-btn" onclick="toggleLanguage()" id="langBtn">Translate to English</button></li>
+        </ul>
+        <div class="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
-      </div>
-      <a href="#banten" class="drawer-link"><span class="d-icon">🏛</span> <span data-en="Introduction" data-id="Pengantar">Introduction</span></a>
-      <a href="#cageur" class="drawer-link"><span class="d-icon">🌿</span> Cageur</a>
-      <a href="#bageur" class="drawer-link"><span class="d-icon">💛</span> Bageur</a>
-      <a href="#bener" class="drawer-link"><span class="d-icon">⚖️</span> Bener</a>
-      <a href="#pinter" class="drawer-link"><span class="d-icon">📖</span> Pinter</a>
-      <a href="#singer" class="drawer-link"><span class="d-icon">🌸</span> Singer</a>
-      <a href="#baduy" class="drawer-link"><span class="d-icon">🏕</span> <span data-en="Baduy People" data-id="Masyarakat Baduy">Baduy People</span></a>
-      <a href="#kesimpulan" class="drawer-link"><span class="d-icon">✨</span> <span data-en="Conclusion" data-id="Kesimpulan">Conclusion</span></a>
-    </div>
-  </div>
-
-  <!-- ═══ HERO ═══════════════════════════════════════════ -->
-  <section id="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-veil"></div>
-    <div class="hero-stripe-t"></div>
-    <div class="hero-stripe-b"></div>
-
-    <div class="hero-inner">
-      <span class="hero-eyebrow" data-en="The Sundanese Culture and Life" data-id="Budaya dan Kehidupan Sunda">The Sundanese Culture and Life</span>
-      <h1 class="hero-title">
-        <span data-en="Welcome to" data-id="Selamat Datang di">Welcome to</span><br /><em>SundaWiki!</em>
-      </h1>
-      <p class="hero-sub" data-en="Exploration of the Sundanese People: Culture, Life, and Heritage. A deep dive into the heart of Sundanese culture, exploring its rich traditions, values, and the unique way of life that has been preserved for generations." data-id="Eksplorasi Masyarakat Sunda: Budaya, Kehidupan, dan Warisan. Sebuah penelusuran mendalam ke jantung budaya Sunda, menggali tradisi, nilai-nilai, dan cara hidup unik yang telah terjaga selama berabad-abad.">
-        Exploration of the Sundanese People: Culture, Life, and Heritage. A deep dive into the heart of Sundanese
-        culture, exploring its rich traditions, values, and the unique way of life that has been preserved for
-        generations.
-      </p>
-      <div class="hero-pills">
-        <span class="pill" data-en="Culture" data-id="Budaya">Culture</span>
-        <span class="pill" data-en="Tradition" data-id="Tradisi">Tradition</span>
-        <span class="pill" data-en="Language" data-id="Bahasa">Language</span>
-        <span class="pill" data-en="Community" data-id="Komunitas">Community</span>
-        <span class="pill" data-en="Heritage" data-id="Warisan">Heritage</span>
-      </div>
-    </div>
-
-    <div class="scroll-cue">
-      <span data-en="Scroll down" data-id="Gulir ke bawah">Scroll down</span>
-      <div class="dot"></div>
-    </div>
-  </section>
-
-  <!-- ═══ BANTEN INTRO ══════════════════════════════════ -->
-  <section id="banten">
-    <div class="banten-grid">
-      <div class="banten-txt rev-l">
-        <span class="label" data-en="✦ Introduction to the Sundanese People" data-id="✦ Pengantar Masyarakat Sunda">✦ Introduction to the Sundanese People</span>
-        <h2 data-en="The Sundanese: Rich in Culture,<br />Language, and Heritage" data-id="Orang Sunda: Kaya Budaya,<br />Bahasa, dan Warisan">The Sundanese: Rich in Culture,<br />Language, and Heritage</h2>
-        <p data-en="The Sundanese are one of the largest ethnic groups in Indonesia, originating from the western part of the island of Java, particularly in West Java and parts of Banten. Known for their deep-rooted identity, the Sundanese people have developed a rich way of life shaped by their natural surroundings, history, and strong social values." data-id="Orang Sunda adalah salah satu kelompok etnis terbesar di Indonesia, berasal dari bagian barat Pulau Jawa, khususnya Jawa Barat dan sebagian Banten. Dikenal dengan identitas mereka yang mengakar kuat, masyarakat Sunda telah mengembangkan gaya hidup yang kaya, dibentuk oleh alam sekitar, sejarah, dan nilai-nilai sosial yang kokoh.">
-          The Sundanese are one of the largest ethnic groups in Indonesia, originating from the western part of the
-          island of Java, particularly in West Java and parts of Banten. Known for their deep-rooted identity, the
-          Sundanese people have developed a rich way of life shaped by their natural surroundings, history, and strong
-          social values.
-        </p>
-        <p data-en="Sundanese society is widely recognized for its vibrant culture, tradition, language, community, and heritage. From traditional arts and music to daily customs and social interactions, these elements are preserved and passed down through generations. The Sundanese language itself plays an important role in maintaining identity, while the sense of community reflects values of harmony, respect, and togetherness." data-id="Masyarakat Sunda dikenal luas karena budaya, tradisi, bahasa, komunitas, dan warisannya yang hidup. Dari seni dan musik tradisional hingga adat istiadat sehari-hari dan interaksi sosial, semua elemen ini dijaga dan diwariskan dari generasi ke generasi. Bahasa Sunda sendiri memegang peranan penting dalam mempertahankan identitas, sementara rasa kebersamaan mencerminkan nilai-nilai harmoni, hormat, dan gotong royong.">
-          Sundanese society is widely recognized for its vibrant culture, tradition, language, community, and heritage.
-          From traditional arts and music to daily customs and social interactions, these elements are preserved and
-          passed down through generations. The Sundanese language itself plays an important role in maintaining
-          identity, while the sense of community reflects values of harmony, respect, and togetherness.
-        </p>
-        <p data-en="Beyond these cultural aspects, the Sundanese are especially known for their strong sense of spirituality, which influences their perspective on life and human relationships. This spiritual foundation is expressed through a well-known philosophical concept that guides everyday behavior and moral values—cageur, bageur, bener, pinter, tur singer—representing the ideal balance of health, kindness, truth, intelligence, and awareness in living a meaningful life." data-id="Di luar aspek budaya tersebut, orang Sunda dikenal dengan rasa spiritualitas mereka yang kuat, yang memengaruhi cara pandang mereka terhadap kehidupan dan hubungan antarmanusia. Landasan spiritual ini diungkapkan melalui konsep filosofis yang terkenal—cageur, bageur, bener, pinter, tur singer—yang mewakili keseimbangan ideal antara kesehatan, kebaikan, kejujuran, kecerdasan, dan kesadaran dalam menjalani hidup yang bermakna.">
-          Beyond these cultural aspects, the Sundanese are especially known for their strong sense of spirituality,
-          which influences their perspective on life and human relationships. This spiritual foundation is expressed
-          through a well-known philosophical concept that guides everyday behavior and moral values—cageur, bageur,
-          bener, pinter, tur singer—representing the ideal balance of health, kindness, truth, intelligence, and
-          awareness in living a meaningful life.
-        </p>
-        <div class="banten-stats">
-          <div class="bstat">
-            <div class="n">5</div>
-            <div class="l" data-en="Core Values" data-id="Nilai Utama">Core Values</div>
-          </div>
-          <div class="bstat">
-            <div class="n">1</div>
-            <div class="l" data-en="Cultural Identity" data-id="Identitas Budaya">Cultural Identity</div>
-          </div>
-          <div class="bstat">
-            <div class="n" data-en="Generations" data-id="Generasi">Generations</div>
-            <div class="l" data-en="Ancestral Heritage" data-id="Warisan Leluhur">Ancestral Heritage</div>
-          </div>
-        </div>
-      </div>
-      <div class="banten-img rev-r">
-        <!-- Sundanese traditional village / West Java landscape -->
-        <img src="https://images.unsplash.com/photo-1596402184320-417e7178b2cd?w=900&q=80"
-          alt="Traditional Sundanese village surrounded by lush green rice fields in West Java" />
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ NILAI HEADER ══════════════════════════════════ -->
-  <div class="sec-intro rev">
-    <span class="label" data-en="✦ Five Spiritual Pillars" data-id="✦ Lima Pilar Spiritual">✦ Five Spiritual Pillars</span>
-    <h2 data-en="Understanding the Core Values of Sundanese Life" data-id="Memahami Nilai Inti Kehidupan Sunda">Understanding the Core Values of Sundanese Life</h2>
-    <div class="divider"></div>
-    <p data-en="These five values are deeply interconnected—like fingers on a single hand. Without one, the foundation of life becomes incomplete and fragile." data-id="Kelima nilai ini saling terhubung erat—seperti jari-jari pada satu tangan. Tanpa salah satunya, fondasi kehidupan menjadi tidak lengkap dan rapuh.">These five values are deeply interconnected—like fingers on a single hand. Without one, the foundation of life
-      becomes incomplete and fragile.</p>
-  </div>
-
-  <!-- ═══ 1. CAGEUR ═══════════════════════════════════════ -->
-  <div class="nilai-wrap" id="cageur">
-    <div class="nilai-panel rev">
-      <div class="np-img">
-        <!-- Tropical nature / green forest wellness - Cageur -->
-        <img src="https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=900&q=80"
-          alt="Sunlight filtering through lush tropical forest representing the Sundanese value of cageur and harmony with nature" />
-        <div class="np-num">01</div>
-      </div>
-      <div class="np-body">
-        <span class="label" data-en="✦ First Value" data-id="✦ Nilai Pertama">✦ First Value</span>
-        <h3>Cageur</h3>
-        <p class="np-arti" data-en="Well-being — Body, Mind, and Nature" data-id="Kesehatan — Raga, Jiwa, dan Alam">Well-being — Body, Mind, and Nature</p>
-        <p data-en="Cageur means healthy, but it is not just about the body being free from illness. In Sundanese philosophy, cageur encompasses three aspects at once: a fit body, a calm mind, and a balanced relationship with nature. If one of these is disrupted, the others will also be affected." data-id="Cageur berarti sehat, namun bukan sekadar bebas dari penyakit. Dalam filosofi Sunda, cageur mencakup tiga aspek sekaligus: tubuh yang bugar, pikiran yang tenang, dan hubungan yang seimbang dengan alam. Jika salah satunya terganggu, yang lainnya pun akan ikut terpengaruh.">
-          Cageur means healthy, but it is not just about the body being free from illness. In Sundanese philosophy,
-          cageur encompasses three aspects at once: a fit body, a calm mind, and a balanced relationship with nature. If
-          one of these is disrupted, the others will also be affected.
-        </p>
-        <p data-en="Imagine exercising regularly but constantly feeling stressed, or having a healthy body while living in a dirty and damaged environment—this cannot yet be called cageur. The Sundanese believe that the body is a trust from God that must be cared for with gratitude, not merely used as a tool for work." data-id="Bayangkan rajin berolahraga tetapi selalu merasa stres, atau memiliki tubuh sehat namun hidup di lingkungan yang kotor dan rusak—ini belum bisa disebut cageur. Orang Sunda percaya bahwa tubuh adalah amanah dari Tuhan yang harus dijaga dengan rasa syukur, bukan sekadar alat untuk bekerja.">
-          Imagine exercising regularly but constantly feeling stressed, or having a healthy body while living in a dirty
-          and damaged environment—this cannot yet be called cageur. The Sundanese believe that the body is a trust from
-          God that must be cared for with gratitude, not merely used as a tool for work.
-        </p>
-        <div class="banten-link">
-          <div class="bl-label">🌿 <span data-en="Real-Life Example in Sundanese Society" data-id="Contoh Nyata dalam Masyarakat Sunda">Real-Life Example in Sundanese Society</span></div>
-          <p data-en="Sundanese people have long maintained a balanced way of life that reflects the value of cageur, seen in their daily habits of living cleanly, consuming natural foods, and preserving harmony with the environment. Health is not only understood as being free from illness, but also as having a calm mind and a well-maintained natural surrounding. Many communities still rely on traditional herbal remedies, protect clean water sources, and practice moderation in their lifestyle. These everyday actions show that for the Sundanese, true well-being comes from the balance between body, mind, and nature." data-id="Masyarakat Sunda sejak lama telah menjaga gaya hidup seimbang yang mencerminkan nilai cageur, terlihat dari kebiasaan sehari-hari mereka hidup bersih, mengonsumsi makanan alami, dan menjaga keselarasan dengan lingkungan. Kesehatan tidak hanya dipahami sebagai bebas dari penyakit, tetapi juga sebagai memiliki pikiran yang tenang dan alam sekitar yang terjaga. Banyak komunitas masih mengandalkan ramuan herbal tradisional, melindungi sumber air bersih, dan menerapkan kesederhanaan dalam gaya hidup mereka.">
-            Sundanese people have long maintained a balanced way of life that reflects the value of cageur, seen in
-            their daily habits of living cleanly, consuming natural foods, and preserving harmony with the environment.
-            Health is not only understood as being free from illness, but also as having a calm mind and a
-            well-maintained natural surrounding. Many communities still rely on traditional herbal remedies, protect
-            clean water sources, and practice moderation in their lifestyle. These everyday actions show that for the
-            Sundanese, true well-being comes from the balance between body, mind, and nature.
-          </p>
-        </div>
-        <div class="np-chips">
-          <span class="chip" data-en="🌿 Traditional Herbal Medicine" data-id="🌿 Jamu Tradisional">🌿 Traditional Herbal Medicine</span>
-          <span class="chip" data-en="🏞 Preserved Nature" data-id="🏞 Alam Terjaga">🏞 Preserved Nature</span>
-          <span class="chip" data-en="💧 Clean Water Sources" data-id="💧 Sumber Air Bersih">💧 Clean Water Sources</span>
-          <span class="chip" data-en="🌾 Balanced Lifestyle" data-id="🌾 Gaya Hidup Seimbang">🌾 Balanced Lifestyle</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="nilai-section-gap"></div>
-
-  <!-- ═══ 2. BAGEUR ═══════════════════════════════════════ -->
-  <div class="nilai-wrap" id="bageur">
-    <div class="nilai-panel flip rev">
-      <div class="np-img">
-        <!-- Gotong royong / community cooperation -->
-        <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?w=900&q=80"
-          alt="Indonesian community members working together in a gotong royong cooperative effort" />
-        <div class="np-num">02</div>
-      </div>
-      <div class="np-body">
-        <span class="label" data-en="✦ Second Value" data-id="✦ Nilai Kedua">✦ Second Value</span>
-        <h3>Bageur</h3>
-        <p class="np-arti" data-en="Kindness — Sincere and Selfless" data-id="Kebaikan — Tulus dan Tanpa Pamrih">Kindness — Sincere and Selfless</p>
-        <p data-en="Bageur is different from pretending to be kind just for recognition. It is about a goodness that comes from within—helping others not to gain attention, but out of genuine care. In Sundanese philosophy, a person who embodies bageur acts as the glue of the community: present when needed and willing to give without expecting anything in return." data-id="Bageur berbeda dari berpura-pura baik hanya demi pengakuan. Ini tentang kebaikan yang datang dari dalam hati—menolong orang lain bukan untuk mendapat perhatian, melainkan karena kepedulian yang tulus. Dalam filosofi Sunda, seseorang yang mencerminkan bageur bertindak sebagai perekat komunitas: hadir saat dibutuhkan dan mau memberi tanpa mengharapkan imbalan.">
-          <strong>Bageur</strong> is different from pretending to be kind just for recognition. It is about a goodness
-          that
-          <em>comes from within</em>—helping others not to gain attention, but out of genuine care. In Sundanese
-          philosophy,
-          a person who embodies <strong>bageur</strong> acts as the <strong>glue of the community</strong>: present when
-          needed
-          and willing to give without expecting anything in return.
-        </p>
-        <p data-en='This value is closely connected to the well-known Sundanese principle: "silih asah, silih asih, silih asuh"—to learn from one another, to love one another, and to care for one another. These three principles summarize how Sundanese people view human relationships.' data-id='Nilai ini erat kaitannya dengan prinsip Sunda yang terkenal: "silih asah, silih asih, silih asuh"—saling mencerdaskan, saling mengasihi, dan saling melindungi. Ketiga prinsip ini merangkum cara orang Sunda memandang hubungan antarmanusia.'>
-          This value is closely connected to the well-known Sundanese principle:
-          <em>"silih asah, silih asih, silih asuh"</em>—to learn from one another, to love one another, and to care for
-          one
-          another. These three principles summarize how Sundanese people view human relationships.
-        </p>
-        <div class="banten-link">
-          <div class="bl-label">💛 <span data-en="Real-Life Examples in Sundanese Society" data-id="Contoh Nyata dalam Masyarakat Sunda">Real-Life Examples in Sundanese Society</span></div>
-          <p data-en="In many Sundanese communities, kindness is reflected in everyday life through simple yet meaningful actions. Neighbors often help one another during events such as building houses, preparing ceremonies, or facing difficult times—without expecting anything in return. Sharing food with others, especially during gatherings, is also a common practice that strengthens social bonds. These habits show how bageur lives within the community, not as a concept, but as a way of life." data-id="Di banyak komunitas Sunda, kebaikan tercermin dalam kehidupan sehari-hari melalui tindakan sederhana namun bermakna. Tetangga sering saling membantu dalam berbagai peristiwa seperti membangun rumah, menyiapkan upacara, atau menghadapi masa sulit—tanpa mengharapkan imbalan. Berbagi makanan dengan orang lain, terutama saat berkumpul, juga merupakan kebiasaan umum yang mempererat ikatan sosial.">
-            In many Sundanese communities, kindness is reflected in everyday life through simple yet meaningful actions.
-            Neighbors often help one another during events such as building houses, preparing ceremonies, or facing
-            difficult times—without expecting anything in return. Sharing food with others, especially during
-            gatherings,
-            is also a common practice that strengthens social bonds. These habits show how <em>bageur</em> lives within
-            the
-            community, not as a concept, but as a way of life.
-          </p>
-        </div>
-        <div class="np-chips">
-          <span class="chip" data-en="🤝 Mutual Cooperation" data-id="🤝 Gotong Royong">🤝 Mutual Cooperation</span>
-          <span class="chip" data-en="🍲 Sharing Food" data-id="🍲 Berbagi Makanan">🍲 Sharing Food</span>
-          <span class="chip" data-en="🏠 Community Support" data-id="🏠 Dukungan Komunitas">🏠 Community Support</span>
-          <span class="chip" data-en="💛 Compassion" data-id="💛 Belas Kasih">💛 Compassion</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="nilai-section-gap"></div>
-
-  <!-- ═══ 3. BENER ════════════════════════════════════════ -->
-  <div class="nilai-wrap" id="bener">
-    <div class="nilai-panel rev">
-      <div class="np-img">
-        <!-- Clear mountain water / natural honesty / bener -->
-        <img src="https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=900&q=80"
-          alt="A serene Indonesian mountain landscape at dawn representing clarity, truth, and the Sundanese value of bener" />
-        <div class="np-num">03</div>
-      </div>
-      <div class="np-body">
-        <span class="label" data-en="✦ Third Value" data-id="✦ Nilai Ketiga">✦ Third Value</span>
-        <h3>Bener</h3>
-        <p class="np-arti" data-en="Truth — Honesty in Words and Actions" data-id="Kejujuran — Kejujuran dalam Kata dan Tindakan">Truth — Honesty in Words and Actions</p>
-        <p data-en="Bener means truth and honesty—but it is not just about avoiding lies when being questioned. More deeply, bener is the alignment between intention, words, and actions. A person who embodies bener does not change their behavior whether or not others are watching." data-id="Bener berarti kebenaran dan kejujuran—namun bukan sekadar menghindari kebohongan saat ditanya. Lebih dalam lagi, bener adalah keselarasan antara niat, ucapan, dan tindakan. Seseorang yang mencerminkan bener tidak mengubah perilakunya baik saat dilihat maupun tidak.">
-          <strong>Bener</strong> means truth and honesty—but it is not just about avoiding lies when being questioned.
-          More deeply, <em>bener</em> is the alignment between <strong>intention, words, and actions.</strong> A person
-          who embodies <em>bener</em> does not change their behavior whether or not others are watching.
-        </p>
-        <p data-en='In the Sundanese language, bener also means "appropriate"—being precise in attitude, making the right decisions, and placing things in their proper context. Without bener, trust between people will slowly collapse, like a bridge whose beams begin to decay one by one.' data-id='Dalam bahasa Sunda, bener juga berarti "tepat"—tepat dalam bersikap, tepat dalam mengambil keputusan, dan tepat menempatkan sesuatu sesuai porsinya. Tanpa bener, kepercayaan antarmanusia akan hancur perlahan, seperti jembatan yang baloknya mulai lapuk satu per satu.'>
-          In the Sundanese language, <em>bener</em> also means "appropriate"—being precise in attitude,
-          making the right decisions, and placing things in their proper context. Without <em>bener</em>, trust
-          between people will slowly collapse, like a bridge whose beams begin to decay one by one.
-        </p>
-        <div class="banten-link">
-          <div class="bl-label">⚖️ <span data-en="Real-Life Examples in Sundanese Society" data-id="Contoh Nyata dalam Masyarakat Sunda">Real-Life Examples in Sundanese Society</span></div>
-          <p data-en="In Sundanese communities, bener is upheld in daily life through transparency in dealings, keeping promises, and speaking truthfully even when it is difficult. Elders and community leaders are especially expected to embody this value, serving as moral anchors who guide others by example rather than by instruction alone." data-id="Dalam komunitas Sunda, bener dijunjung tinggi dalam kehidupan sehari-hari melalui keterbukaan dalam urusan, menepati janji, dan berbicara jujur meski sulit. Para sesepuh dan pemimpin komunitas terutama diharapkan mewujudkan nilai ini, menjadi jangkar moral yang membimbing orang lain melalui keteladanan, bukan sekadar perintah.">
-            In Sundanese communities, <em>bener</em> is upheld in daily life through transparency in dealings, keeping
-            promises, and speaking truthfully even when it is difficult. Elders and community leaders are especially
-            expected to embody this value, serving as moral anchors who guide others by example rather than by
-            instruction alone.
-          </p>
-        </div>
-        <div class="np-chips">
-          <span class="chip" data-en="⚖️ Honesty" data-id="⚖️ Kejujuran">⚖️ Honesty</span>
-          <span class="chip" data-en="🤝 Trust" data-id="🤝 Kepercayaan">🤝 Trust</span>
-          <span class="chip" data-en="🗣 Truthful Speech" data-id="🗣 Ucapan Jujur">🗣 Truthful Speech</span>
-          <span class="chip" data-en="📜 Integrity" data-id="📜 Integritas">📜 Integrity</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="nilai-section-gap"></div>
-
-  <!-- ═══ 4. PINTER ═══════════════════════════════════════ -->
-  <div class="nilai-wrap" id="pinter">
-    <div class="nilai-panel flip rev">
-      <div class="np-img">
-        <!-- Traditional Sundanese knowledge / learning / manuscript -->
-        <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=900&q=80"
-          alt="Ancient manuscripts and books representing traditional Sundanese wisdom and knowledge transmission" />
-        <div class="np-num">04</div>
-      </div>
-      <div class="np-body">
-        <span class="label" data-en="✦ Fourth Value" data-id="✦ Nilai Keempat">✦ Fourth Value</span>
-        <h3>Pinter</h3>
-        <p class="np-arti" data-en="Intelligence — Rooted and Meaningful Knowledge" data-id="Kecerdasan — Ilmu yang Berakar dan Bermakna">Intelligence — Rooted and Meaningful Knowledge</p>
-        <p data-en="Pinter is not about having the highest grades or graduating from a prestigious university. In Sundanese philosophy, pinter refers to a form of intelligence that is whole and humble—the ability to understand oneself, read situations wisely, handle problems calmly, and use knowledge as a light for others, not as a tool for pride." data-id="Pinter bukan tentang mendapatkan nilai tertinggi atau lulus dari universitas bergengsi. Dalam filosofi Sunda, pinter merujuk pada bentuk kecerdasan yang utuh dan rendah hati—kemampuan memahami diri sendiri, membaca situasi dengan bijak, menangani masalah dengan tenang, dan menggunakan pengetahuan sebagai cahaya bagi orang lain, bukan sebagai alat kebanggaan.">
-          <strong>Pinter</strong> is not about having the highest grades or graduating from a prestigious university.
-          In
-          Sundanese philosophy, <em>pinter</em> refers to a form of intelligence that is <em>whole and humble</em>—the
-          ability
-          to understand oneself, read situations wisely, handle problems calmly, and use knowledge as a
-          <strong>light for others</strong>, not as a tool for pride.
-        </p>
-        <p data-en="There is a Sundanese principle closely tied to pinter: handap asor—humility. Why? Because the more a person learns, the more they realize how much they do not know. True knowledge always leads to humility." data-id="Ada prinsip Sunda yang erat kaitannya dengan pinter: handap asor—kerendahan hati. Mengapa? Karena semakin banyak seseorang belajar, semakin mereka menyadari betapa banyak yang belum mereka ketahui. Pengetahuan sejati selalu berujung pada kerendahan hati.">
-          There is a Sundanese principle closely tied to <em>pinter</em>: <em>handap asor</em>—humility. Why? Because
-          the more
-          a person learns, the more they realize how much they do not know. True knowledge always leads to humility.
-        </p>
-        <div class="banten-link">
-          <div class="bl-label">📖 <span data-en="Real-Life Examples in Sundanese Society" data-id="Contoh Nyata dalam Masyarakat Sunda">Real-Life Examples in Sundanese Society</span></div>
-          <p data-en="In Sundanese communities, intelligence is reflected not only in formal education but also in everyday wisdom. Many people apply their knowledge to solve problems, maintain harmony, and support others in their community. From elders who understand nature and traditions to younger generations who pursue education while staying grounded, pinter is seen as knowledge that is useful, humble, and beneficial for others." data-id="Dalam komunitas Sunda, kecerdasan tidak hanya tercermin dalam pendidikan formal, tetapi juga dalam kebijaksanaan sehari-hari. Banyak orang menerapkan pengetahuan mereka untuk memecahkan masalah, menjaga keharmonisan, dan mendukung orang lain dalam komunitas mereka. Dari sesepuh yang memahami alam dan tradisi hingga generasi muda yang mengejar pendidikan sambil tetap rendah hati, pinter dipandang sebagai ilmu yang bermanfaat, rendah hati, dan menguntungkan orang lain.">
-            In Sundanese communities, intelligence is reflected not only in formal education but also in everyday
-            wisdom.
-            Many people apply their knowledge to solve problems, maintain harmony, and support others in their
-            community.
-            From elders who understand nature and traditions to younger generations who pursue education while staying
-            grounded, <em>pinter</em> is seen as knowledge that is useful, humble, and beneficial for others.
-          </p>
-        </div>
-        <div class="np-chips">
-          <span class="chip" data-en="📚 Lifelong Learning" data-id="📚 Belajar Seumur Hidup">📚 Lifelong Learning</span>
-          <span class="chip" data-en="🌿 Traditional Knowledge" data-id="🌿 Pengetahuan Tradisional">🌿 Traditional Knowledge</span>
-          <span class="chip" data-en="🧠 Wisdom" data-id="🧠 Kebijaksanaan">🧠 Wisdom</span>
-          <span class="chip" data-en="🙏 Humility" data-id="🙏 Kerendahan Hati">🙏 Humility</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="nilai-section-gap"></div>
-
-  <!-- ═══ 5. SINGER ═══════════════════════════════════════ -->
-  <div class="nilai-wrap" id="singer">
-    <div class="nilai-panel rev">
-      <div class="np-img">
-        <!-- Sundanese traditional craftsmanship / weaving / batik -->
-        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80"
-          alt="Sundanese artisan weaving traditional batik fabric with skilled hands demonstrating the value of singer" />
-        <div class="np-num">05</div>
-      </div>
-      <div class="np-body">
-        <span class="label" data-en="✦ Fifth Value · The Crown" data-id="✦ Nilai Kelima · Mahkota">✦ Fifth Value · The Crown</span>
-        <h3>Singer</h3>
-        <p class="np-arti" data-en="Skillfulness — The Real Expression of All Values" data-id="Keterampilan — Ekspresi Nyata Semua Nilai">Skillfulness — The Real Expression of All Values</p>
-        <p data-en="Singer represents the culmination of the four previous values—and the most visible one. When a person has achieved cageur, bageur, bener, and pinter, singer becomes the way they prove it through skills and meaningful actions that benefit others. A person who embodies singer does not rely on theory alone—their hands create, and their actions make an impact." data-id="Singer merupakan puncak dari empat nilai sebelumnya—dan yang paling terlihat nyata. Ketika seseorang telah mencapai cageur, bageur, bener, dan pinter, singer menjadi cara mereka membuktikannya melalui keterampilan dan tindakan bermakna yang bermanfaat bagi orang lain. Seseorang yang mencerminkan singer tidak hanya bergantung pada teori—tangannya mencipta, dan tindakannya memberikan dampak.">
-          <strong>Singer</strong> represents the culmination of the four previous values—and the most visible one.
-          When a
-          person has achieved <em>cageur, bageur, bener,</em> and <em>pinter</em>, <em>singer</em> becomes the way
-          they prove it
-          through <strong>skills and meaningful actions that benefit others.</strong> A person who embodies
-          <em>singer</em>
-          does not rely on theory alone—their hands create, and their actions make an impact.
-        </p>
-        <p data-en="Singer is not about being the most talented or the most famous. It is about living a purposeful and useful life—using one's abilities for the greater good. Such a life becomes an example for others to follow, not just something to admire from afar." data-id="Singer bukan tentang menjadi yang paling berbakat atau paling terkenal. Ini tentang menjalani hidup yang bertujuan dan bermanfaat—menggunakan kemampuan seseorang untuk kebaikan bersama. Kehidupan seperti itu menjadi teladan bagi orang lain untuk diikuti, bukan sekadar dikagumi dari kejauhan.">
-          <em>Singer</em> is not about being the most talented or the most famous. It is about living a
-          <em>purposeful and useful life</em>—using one's abilities for the greater good. Such a life becomes an
-          example
-          for others to follow, not just something to admire from afar.
-        </p>
-        <div class="banten-link">
-          <div class="bl-label">🌸 <span data-en="Real-Life Examples in Sundanese Society" data-id="Contoh Nyata dalam Masyarakat Sunda">Real-Life Examples in Sundanese Society</span></div>
-          <p data-en="In Sundanese communities, skillfulness can be seen in various forms of daily life. From artisans who create traditional crafts with dedication, to individuals who use their abilities to support their families and communities, singer is reflected in actions that bring real benefits. Whether through craftsmanship, service, or leadership, these skills are practiced not for recognition, but to contribute meaningfully to society." data-id="Dalam komunitas Sunda, keterampilan dapat dilihat dalam berbagai bentuk kehidupan sehari-hari. Dari pengrajin yang membuat kerajinan tradisional dengan penuh dedikasi, hingga individu yang menggunakan kemampuan mereka untuk mendukung keluarga dan komunitas, singer tercermin dalam tindakan yang membawa manfaat nyata. Baik melalui kerajinan tangan, pelayanan, maupun kepemimpinan, keterampilan ini dipraktikkan bukan untuk pengakuan, melainkan untuk berkontribusi secara bermakna bagi masyarakat.">
-            In Sundanese communities, skillfulness can be seen in various forms of daily life. From artisans who
-            create
-            traditional crafts with dedication, to individuals who use their abilities to support their families and
-            communities, <em>singer</em> is reflected in actions that bring real benefits. Whether through
-            craftsmanship,
-            service, or leadership, these skills are practiced not for recognition, but to contribute meaningfully to
-            society.
-          </p>
-        </div>
-        <div class="np-chips">
-          <span class="chip" data-en="🔨 Craftsmanship" data-id="🔨 Kerajinan Tangan">🔨 Craftsmanship</span>
-          <span class="chip" data-en="🧵 Traditional Skills" data-id="🧵 Keterampilan Tradisional">🧵 Traditional Skills</span>
-          <span class="chip" data-en="🎨 Creative Work" data-id="🎨 Karya Kreatif">🎨 Creative Work</span>
-          <span class="chip" data-en="🌱 Useful Impact" data-id="🌱 Dampak Bermanfaat">🌱 Useful Impact</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ QUOTE ════════════════════════════════════════ -->
-  <section id="quote" class="rev">
-    <div class="quote-inner">
-      <blockquote>
-        "Hirup kudu sing <em>cageur</em>, hate kudu sing <em>bageur</em>,
-        omongan kudu sing <em>bener</em>, pikiran kudu sing <em>pinter</em>,
-        tur lampah kudu sing <em>singer</em>."
-      </blockquote>
-      <cite data-en='— Sundanese Philosophy · "Live with health, kindness, truth, wisdom, and skillful action."' data-id='— Filosofi Sunda · "Hidup harus sehat, hati harus baik, ucapan harus benar, pikiran harus cerdas, dan tindakan harus terampil."'>— Sundanese Philosophy · "Live with health, kindness, truth, wisdom, and skillful action."
-      </cite>
-    </div>
-  </section>
-
-  <!-- ═══ BADUY ════════════════════════════════════════ -->
-  <div class="sec-intro rev" id="baduy" style="padding-top: 4rem; padding-bottom: 2rem;">
-    <span class="label" data-en="✦ Living Evidence" data-id="✦ Bukti Nyata">✦ Living Evidence</span>
-    <h2 data-en="The Baduy People —<br />A True Representation of Sundanese Values" data-id="Masyarakat Baduy —<br />Representasi Nyata Nilai-Nilai Sunda">The Baduy People —<br />A True Representation of Sundanese Values</h2>
-    <div class="divider"></div>
-    <p data-en="The Baduy people are part of the Sundanese community, known for strongly embodying the values of cageur, bageur, bener, pinter, tur singer in their daily lives." data-id="Masyarakat Baduy merupakan bagian dari komunitas Sunda, yang dikenal karena sangat menghayati nilai-nilai cageur, bageur, bener, pinter, tur singer dalam kehidupan sehari-hari mereka.">The Baduy people are part of the Sundanese community, known for strongly embodying the values of cageur,
-      bageur, bener, pinter, tur singer in their daily lives.</p>
-  </div>
-
-  <section id="baduy-card" style="padding: 0 1rem 6rem;">
-    <div class="baduy-card rev">
-      <div class="baduy-top">
-        <div class="baduy-img" style="order: -1;">
-          <!-- Baduy people in traditional white clothing walking through forest -->
-          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=80"
-            alt="Misty forested mountains of Kendeng, Lebak Regency, the homeland of the Baduy people in Banten" />
-        </div>
-        <div class="baduy-txt">
-          <span class="label" data-en="✦ Lebak Regency · Banten" data-id="✦ Kabupaten Lebak · Banten">✦ Lebak Regency · Banten</span>
-          <h2 data-en="Urang Kanekes —<br />Living the Five Sundanese Values" data-id="Urang Kanekes —<br />Menghidupi Lima Nilai Sunda">Urang Kanekes —<br />Living the Five Sundanese Values</h2>
-          <p data-en="The Baduy people, or as they call themselves Urang Kanekes, are part of the Sundanese community living in the Kendeng Mountains, Lebak Regency, Banten. They are divided into Baduy Dalam (Tangtu), who strictly uphold traditional rules, and Baduy Luar (Panamping), who are slightly more open to the outside world while still firmly holding onto their ancestral Sundanese values." data-id="Masyarakat Baduy, atau yang menyebut diri mereka Urang Kanekes, adalah bagian dari komunitas Sunda yang tinggal di Pegunungan Kendeng, Kabupaten Lebak, Banten. Mereka terbagi menjadi Baduy Dalam (Tangtu), yang ketat menjaga aturan adat, dan Baduy Luar (Panamping), yang sedikit lebih terbuka terhadap dunia luar namun tetap teguh memegang nilai-nilai Sunda leluhur mereka.">
-            The Baduy people, or as they call themselves Urang Kanekes, are part of the Sundanese community living in
-            the Kendeng Mountains, Lebak Regency, Banten. They are divided into Baduy Dalam (Tangtu), who strictly
-            uphold traditional rules, and Baduy Luar (Panamping), who are slightly more open to the outside world
-            while still firmly holding onto their ancestral Sundanese values.
-          </p>
-          <p data-en="In daily life, the Baduy community is known as one of the most consistent groups in practicing the Sundanese philosophy of life: cageur, bageur, bener, pinter, tur singer. These values are not taught as abstract theories, but lived directly through their way of life—maintaining health and harmony with nature (cageur), living with kindness and togetherness (bageur), upholding honesty and correctness (bener), understanding life with wisdom (pinter), and practicing real, useful skills in everyday work (singer)." data-id="Dalam kehidupan sehari-hari, komunitas Baduy dikenal sebagai salah satu kelompok yang paling konsisten dalam mempraktikkan filosofi hidup Sunda: cageur, bageur, bener, pinter, tur singer. Nilai-nilai ini tidak diajarkan sebagai teori abstrak, melainkan dihayati langsung melalui cara hidup mereka—menjaga kesehatan dan keselarasan dengan alam (cageur), hidup dengan kebaikan dan kebersamaan (bageur), menjunjung kejujuran dan kebenaran (bener), memahami kehidupan dengan kearifan (pinter), dan mempraktikkan keterampilan nyata yang bermanfaat dalam pekerjaan sehari-hari (singer).">
-            In daily life, the Baduy community is known as one of the most consistent groups in practicing the
-            Sundanese philosophy of life: cageur, bageur, bener, pinter, tur singer. These values are not taught as
-            abstract theories, but lived directly through their way of life—maintaining health and harmony with nature
-            (cageur), living with kindness and togetherness (bageur), upholding honesty and correctness (bener),
-            understanding life with wisdom (pinter), and practicing real, useful skills in everyday work (singer).
-          </p>
-          <p data-en="Without electricity, motor vehicles, or modern technology, Baduy life may appear simple from the outside. However, behind this simplicity lies a deep awareness: that a dignified life comes from the balance between humans, nature, and life values. Through their customary law known as Pikukuh Karuhun, they demonstrate that the five core Sundanese values are not just heritage, but a way of life that continues to be preserved to this day." data-id="Tanpa listrik, kendaraan bermotor, atau teknologi modern, kehidupan Baduy mungkin tampak sederhana dari luar. Namun di balik kesederhanaan ini terdapat kesadaran mendalam: bahwa kehidupan yang bermartabat berasal dari keseimbangan antara manusia, alam, dan nilai-nilai kehidupan. Melalui hukum adat mereka yang dikenal sebagai Pikukuh Karuhun, mereka membuktikan bahwa kelima nilai inti Sunda bukan sekadar warisan, melainkan cara hidup yang terus dijaga hingga hari ini.">
-            Without electricity, motor vehicles, or modern technology, Baduy life may appear simple from the outside.
-            However, behind this simplicity lies a deep awareness: that a dignified life comes from the balance
-            between humans, nature, and life values. Through their customary law known as Pikukuh Karuhun, they
-            demonstrate that the five core Sundanese values are not just heritage, but a way of life that continues to
-            be preserved to this day.
-          </p>
-        </div>
-      </div>
-      <div class="baduy-five">
-        <div class="bf-cell">
-          <div class="bf-icon">🌿</div>
-          <div class="bf-name">Cageur</div>
-          <div class="bf-sub" data-en="Organic living" data-id="Hidup organik">Organic living</div>
-        </div>
-        <div class="bf-cell">
-          <div class="bf-icon">🤝</div>
-          <div class="bf-name">Bageur</div>
-          <div class="bf-sub" data-en="Mutual help" data-id="Saling membantu">Mutual help</div>
-        </div>
-        <div class="bf-cell">
-          <div class="bf-icon">⚖️</div>
-          <div class="bf-name">Bener</div>
-          <div class="bf-sub" data-en="Honest living" data-id="Hidup jujur">Honest living</div>
-        </div>
-        <div class="bf-cell">
-          <div class="bf-icon">🌙</div>
-          <div class="bf-name">Pinter</div>
-          <div class="bf-sub" data-en="Nature wisdom" data-id="Kearifan alam">Nature wisdom</div>
-        </div>
-        <div class="bf-cell">
-          <div class="bf-icon">🧵</div>
-          <div class="bf-name">Singer</div>
-          <div class="bf-sub" data-en="Traditional skills" data-id="Keterampilan tradisional">Traditional skills</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ KESIMPULAN ════════════════════════════════════ -->
-  <section id="kesimpulan" style="background: var(--bg3); position: relative; padding: 6rem 1.5rem;">
-    <div
-      style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--copper),var(--gold),var(--copper),transparent);">
-    </div>
-    <div style="max-width: 820px; margin: 0 auto;">
-      <div class="sec-intro rev" style="padding: 0 0 3rem;">
-        <span class="label" data-en="✦ Conclusion" data-id="✦ Kesimpulan">✦ Conclusion</span>
-        <h2 data-en="Relevant Yesterday,<br />Relevant Today" data-id="Relevan Kemarin,<br />Relevan Hari Ini">Relevant Yesterday,<br />Relevant Today</h2>
-        <div class="divider"></div>
-      </div>
-      <div class="rev" style="font-size:1rem; line-height:2; color:var(--mist); max-width:760px; margin:0 auto;">
-        <p style="margin-bottom:1.4rem;" data-en="In a world that moves faster every day, the values of cageur, bageur, bener, pinter, tur singer may seem simple. However, in times like these, these values become even more important." data-id="Di dunia yang bergerak semakin cepat setiap harinya, nilai-nilai cageur, bageur, bener, pinter, tur singer mungkin tampak sederhana. Namun di masa seperti ini, nilai-nilai tersebut justru menjadi semakin penting.">
-          In a world that moves faster every day, the values of cageur, bageur, bener, pinter, tur singer may seem
-          simple. However, in times like these, these values become even more important.
-        </p>
-        <p style="margin-bottom:1.4rem;" data-en="Cageur reminds us to maintain balance in life amidst modern pressures. Bageur restores a sense of care and togetherness in an increasingly individualistic world. Bener serves as a guide to stay honest in the midst of overwhelming and often unreliable information." data-id="Cageur mengingatkan kita untuk menjaga keseimbangan hidup di tengah tekanan modern. Bageur memulihkan rasa peduli dan kebersamaan di dunia yang semakin individualistis. Bener menjadi pedoman untuk tetap jujur di tengah arus informasi yang deras dan seringkali tidak dapat diandalkan.">
-          Cageur reminds us to maintain balance in life amidst modern pressures. Bageur restores a sense of care and
-          togetherness in an increasingly individualistic world. Bener serves as a guide to stay honest in the midst
-          of overwhelming and often unreliable information.
-        </p>
-        <p style="margin-bottom:1.4rem;" data-en="Pinter encourages us to keep learning wisely, not only from technology but also from everyday life. Meanwhile, singer urges us not to stop at knowledge alone, but to turn it into real actions that benefit others." data-id="Pinter mendorong kita untuk terus belajar dengan bijak, tidak hanya dari teknologi tetapi juga dari kehidupan sehari-hari. Sementara itu, singer mengajak kita untuk tidak berhenti pada pengetahuan saja, melainkan mengubahnya menjadi tindakan nyata yang bermanfaat bagi orang lain.">
-          Pinter encourages us to keep learning wisely, not only from technology but also from everyday life.
-          Meanwhile, singer urges us not to stop at knowledge alone, but to turn it into real actions that benefit
-          others.
-        </p>
-        <p style="margin-bottom:2.5rem;" data-en="These values originate from the Sundanese people, yet their meaning is universal. Wherever we are, we should learn from and apply them in our daily lives as a guide toward a more balanced, honest, and meaningful way of living." data-id="Nilai-nilai ini berasal dari masyarakat Sunda, namun maknanya bersifat universal. Di mana pun kita berada, kita hendaknya mempelajari dan menerapkannya dalam kehidupan sehari-hari sebagai panduan menuju cara hidup yang lebih seimbang, jujur, dan bermakna.">
-          These values originate from the Sundanese people, yet their meaning is universal. Wherever we are, we should
-          learn from and apply them in our daily lives as a guide toward a more balanced, honest, and meaningful way
-          of living.
-        </p>
-        <div style="display:flex; flex-wrap:wrap; gap:1rem; justify-content:center;">
-          <div
-            style="background:rgba(201,151,59,.07);border:1px solid rgba(201,151,59,.2);padding:1.2rem 1.6rem;text-align:center;flex:1;min-width:140px;">
-            <div style="font-size:1.5rem;margin-bottom:.4rem;">🌿</div>
-            <div style="font-family:'Playfair Display',serif;font-style:italic;color:var(--gold);font-size:.95rem;">
-              Cageur</div>
-            <div
-              style="font-family:'Josefin Sans',sans-serif;font-size:.52rem;letter-spacing:.1em;color:var(--mist);text-transform:uppercase;margin-top:.3rem;"
-              data-en="Take care of yourself" data-id="Jaga dirimu">Take care of yourself</div>
-          </div>
-          <div
-            style="background:rgba(201,151,59,.07);border:1px solid rgba(201,151,59,.2);padding:1.2rem 1.6rem;text-align:center;flex:1;min-width:140px;">
-            <div style="font-size:1.5rem;margin-bottom:.4rem;">💛</div>
-            <div style="font-family:'Playfair Display',serif;font-style:italic;color:var(--gold);font-size:.95rem;">
-              Bageur</div>
-            <div
-              style="font-family:'Josefin Sans',sans-serif;font-size:.52rem;letter-spacing:.1em;color:var(--mist);text-transform:uppercase;margin-top:.3rem;"
-              data-en="Sincerely share" data-id="Berbagi dengan tulus">Sincerely share</div>
-          </div>
-          <div
-            style="background:rgba(201,151,59,.07);border:1px solid rgba(201,151,59,.2);padding:1.2rem 1.6rem;text-align:center;flex:1;min-width:140px;">
-            <div style="font-size:1.5rem;margin-bottom:.4rem;">⚖️</div>
-            <div style="font-family:'Playfair Display',serif;font-style:italic;color:var(--gold);font-size:.95rem;">
-              Bener</div>
-            <div
-              style="font-family:'Josefin Sans',sans-serif;font-size:.52rem;letter-spacing:.1em;color:var(--mist);text-transform:uppercase;margin-top:.3rem;"
-              data-en="Live honestly" data-id="Hidup jujur">Live honestly</div>
-          </div>
-          <div
-            style="background:rgba(201,151,59,.07);border:1px solid rgba(201,151,59,.2);padding:1.2rem 1.6rem;text-align:center;flex:1;min-width:140px;">
-            <div style="font-size:1.5rem;margin-bottom:.4rem;">📖</div>
-            <div style="font-family:'Playfair Display',serif;font-style:italic;color:var(--gold);font-size:.95rem;">
-              Pinter</div>
-            <div
-              style="font-family:'Josefin Sans',sans-serif;font-size:.52rem;letter-spacing:.1em;color:var(--mist);text-transform:uppercase;margin-top:.3rem;"
-              data-en="Keep learning" data-id="Terus belajar">Keep learning</div>
-          </div>
-          <div
-            style="background:rgba(201,151,59,.07);border:1px solid rgba(201,151,59,.2);padding:1.2rem 1.6rem;text-align:center;flex:1;min-width:140px;">
-            <div style="font-size:1.5rem;margin-bottom:.4rem;">🌸</div>
-            <div style="font-family:'Playfair Display',serif;font-style:italic;color:var(--gold);font-size:.95rem;">
-              Singer</div>
-            <div
-              style="font-family:'Josefin Sans',sans-serif;font-size:.52rem;letter-spacing:.1em;color:var(--mist);text-transform:uppercase;margin-top:.3rem;"
-              data-en="Prove it through action" data-id="Buktikan lewat tindakan">Prove it through action</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ FOOTER ═══════════════════════════════════════ -->
-  <footer>
-    <div class="footer-brand">SundaWiki</div>
-    <div class="footer-tagline" data-en="The Sundanese Culture and Life" data-id="Budaya dan Kehidupan Sunda">The Sundanese Culture and Life</div>
-    <nav class="footer-links">
-      <a href="#banten" data-en="Introduction" data-id="Pengantar">Introduction</a>
-      <a href="#cageur">Cageur</a>
-      <a href="#bageur">Bageur</a>
-      <a href="#bener">Bener</a>
-      <a href="#pinter">Pinter</a>
-      <a href="#singer">Singer</a>
-      <a href="#baduy" data-en="Baduy People" data-id="Masyarakat Baduy">Baduy People</a>
-      <a href="#kesimpulan" data-en="Conclusion" data-id="Kesimpulan">Conclusion</a>
     </nav>
-    <p class="footer-copy">
-      <span data-en="Sundanese Values · Culture and Way of Life" data-id="Nilai-Nilai Sunda · Budaya dan Cara Hidup">Sundanese Values · Culture and Way of Life</span><br />
-      <span data-en="Dedicated to introducing the Sundanese people—their culture, life, and heritage." data-id="Dipersembahkan untuk memperkenalkan masyarakat Sunda—budaya, kehidupan, dan warisan mereka.">Dedicated to introducing the Sundanese people—their culture, life, and heritage.</span><br /><br />
-      &copy; 2026–Present Evan Hendra Mulyadi. All Rights Reserved.
-    </p>
-  </footer>
 
-  <!-- ═══ JAVASCRIPT ════════════════════════════════════ -->
-  <script>
-    /* ── Navbar scroll effect ── */
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      navbar.classList.toggle('scrolled', window.scrollY > 50);
-    }, { passive: true });
+    <header>
+        <h1 id="heroTitle">Spiritualitas Masyarakat Sunda</h1>
+        <p id="heroSub">Menelusuri jejak kearifan lokal yang abadi dalam harmoni alam.</p>
+    </header>
 
-    /* ── Hamburger + drawer ── */
-    const hamBtn = document.getElementById('hamBtn');
-    const mobileDrawer = document.getElementById('mobileDrawer');
+    <section id="filosofi">
+        <h2 id="sec1Title">Dasar Spiritualitas Sunda</h2>
+        <p id="sec1Content">
+            Spiritualitas Sunda bukan sekadar ritual, melainkan pandangan hidup yang menekankan harmoni antara manusia, alam, dan Sang Pencipta (Gusti Nu Maha Suci). Inti dari nilai ini adalah menjaga keseimbangan kosmos melalui perilaku sehari-hari. 
+            <br><br>
+            Nilai spiritualitas Sunda yang paling legendaris terangkum dalam lima konsep utama: 
+            <strong>Cageur, Bageur, Bener, Pinter, tur Singer.</strong>
+        </p>
+    </section>
 
-    hamBtn.addEventListener('click', () => {
-      const isOpen = mobileDrawer.classList.toggle('open');
-      hamBtn.classList.toggle('open', isOpen);
-      document.body.style.overflow = isOpen ? 'hidden' : '';
-    });
+    <section id="pancaniti">
+        <h2 id="sec2Title">5 Pilar Karakter (Panca Niti)</h2>
+        <div class="card-container">
+            <div class="card">
+                <h3>Cageur</h3>
+                <p id="c1">Sehat secara fisik, mental, dan cara berpikir.</p>
+            </div>
+            <div class="card">
+                <h3>Bageur</h3>
+                <p id="c2">Memiliki akhlak mulia dan suka menolong sesama.</p>
+            </div>
+            <div class="card">
+                <h3>Bener</h3>
+                <p id="c3">Menjalankan hidup di jalan yang lurus dan jujur.</p>
+            </div>
+            <div class="card">
+                <h3>Pinter</h3>
+                <p id="c4">Memiliki ilmu pengetahuan dan bijak menggunakannya.</p>
+            </div>
+            <div class="card">
+                <h3>Singer</h3>
+                <p id="c5">Mawas diri, teliti, dan cekatan dalam bekerja.</p>
+            </div>
+        </div>
+    </section>
 
-    /* ── Drawer links: smooth scroll + close ── */
-    document.querySelectorAll('.drawer-link').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const target = document.querySelector(link.getAttribute('href'));
-        if (target) {
-          mobileDrawer.classList.remove('open');
-          hamBtn.classList.remove('open');
-          document.body.style.overflow = '';
-          setTimeout(() => {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 80);
+    <section id="baduy">
+        <div class="baduy-section">
+            <h2 id="baduyTitle">Suku Baduy: Penjaga Amanah</h2>
+            <p id="baduyContent">
+                Salah satu representasi nyata dari penerapan 5 poin spiritualitas di atas adalah <strong>Suku Baduy</strong> di Banten. Meskipun secara administratif berada di provinsi yang berbeda, Suku Baduy merupakan bagian integral dari rumpun masyarakat Sunda (Sunda Wiwitan). 
+                <br><br>
+                Hubungan keduanya sangat erat; Baduy dianggap sebagai kelompok yang masih memegang teguh "Pikukuh" atau aturan adat leluhur Sunda kuno tanpa pengaruh modernisasi. Mereka adalah bukti hidup bagaimana konsep *Bener* dan *Singer* diterapkan dalam menjaga kelestarian alam.
+            </p>
+        </div>
+    </section>
+
+    <section>
+        <h2 id="conclTitle">Kesimpulan</h2>
+        <p id="conclContent">
+            Spiritualitas Sunda mengajarkan bahwa kesempurnaan hidup dicapai bukan melalui materi, melainkan melalui kualitas diri (Cageur-Bageur) yang bermanfaat bagi lingkungan sekitarnya. Melestarikan nilai ini adalah cara kita menjaga identitas di tengah arus zaman.
+        </p>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 SundaWiki. Dibuat dengan bangga.</p>
+    </footer>
+
+    <script>
+        // Toggle Hamburger Menu
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
         }
-      });
-    });
 
-    /* ── Desktop nav links: smooth scroll ── */
-    document.querySelectorAll('.nav-links a, .footer-links a').forEach(link => {
-      link.addEventListener('click', (e) => {
-        const href = link.getAttribute('href');
-        if (href && href.startsWith('#')) {
-          e.preventDefault();
-          const target = document.querySelector(href);
-          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Feature Translate Sederhana
+        let isEnglish = false;
+        function toggleLanguage() {
+            isEnglish = !isEnglish;
+            const btn = document.getElementById('langBtn');
+            
+            if (isEnglish) {
+                btn.innerText = "Terjemah ke Indonesia";
+                document.getElementById('heroTitle').innerText = "Spirituality of Sundanese People";
+                document.getElementById('heroSub').innerText = "Tracing the footsteps of eternal local wisdom in nature's harmony.";
+                document.getElementById('sec1Title').innerText = "Basics of Sundanese Spirituality";
+                document.getElementById('sec2Title').innerText = "5 Pillars of Character";
+                document.getElementById('baduyTitle').innerText = "Baduy Tribe: The Guardians";
+                document.getElementById('conclTitle').innerText = "Conclusion";
+                document.getElementById('c1').innerText = "Healthy physically, mentally, and in way of thinking.";
+                document.getElementById('c2').innerText = "Having noble character and helping others.";
+                document.getElementById('c3').innerText = "Living life on a straight and honest path.";
+                document.getElementById('c4').innerText = "Possessing knowledge and using it wisely.";
+                document.getElementById('c5').innerText = "Introspective, meticulous, and agile at work.";
+            } else {
+                btn.innerText = "Translate to English";
+                location.reload(); // Refresh untuk kembali ke bahasa asal
+            }
         }
-      });
-    });
-
-    /* ── Close drawer on outside click ── */
-    document.addEventListener('click', (e) => {
-      if (
-        mobileDrawer.classList.contains('open') &&
-        !mobileDrawer.contains(e.target) &&
-        !hamBtn.contains(e.target)
-      ) {
-        mobileDrawer.classList.remove('open');
-        hamBtn.classList.remove('open');
-        document.body.style.overflow = '';
-      }
-    });
-
-    /* ── Scroll Reveal ── */
-    const revEls = document.querySelectorAll('.rev, .rev-l, .rev-r');
-    const revObs = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('on');
-          revObs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-
-    revEls.forEach(el => revObs.observe(el));
-
-    /* ── Stagger bf-cell inside baduy-five ── */
-    const bfObs = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          Array.from(entry.target.children).forEach((child, i) => {
-            child.style.transition = `opacity .5s ${i * 0.09}s ease, transform .5s ${i * 0.09}s ease`;
-            child.style.opacity = '0';
-            child.style.transform = 'translateY(16px)';
-            requestAnimationFrame(() => {
-              setTimeout(() => {
-                child.style.opacity = '1';
-                child.style.transform = 'none';
-              }, i * 90 + 50);
-            });
-          });
-          bfObs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.3 });
-
-    document.querySelectorAll('.baduy-five').forEach(el => bfObs.observe(el));
-
-    /* ══════════════════════════════════════════════
-       LANGUAGE SWITCHER
-    ══════════════════════════════════════════════ */
-    let currentLang = 'en';
-
-    function applyLanguage(lang) {
-      currentLang = lang;
-      document.documentElement.lang = lang;
-
-      // Update all elements with data-en / data-id
-      document.querySelectorAll('[data-en], [data-id]').forEach(el => {
-        const text = el.getAttribute('data-' + lang);
-        if (text) {
-          // Handle innerHTML for elements with <br /> tags
-          if (text.includes('<br')) {
-            el.innerHTML = text;
-          } else {
-            el.textContent = text;
-          }
-        }
-      });
-
-      // Sync all lang buttons
-      document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
-      });
-
-      // Store preference
-      try { localStorage.setItem('sw-lang', lang); } catch(e) {}
-    }
-
-    // Attach click to all lang buttons (desktop + mobile)
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        applyLanguage(btn.getAttribute('data-lang'));
-      });
-    });
-
-    // Restore saved preference
-    try {
-      const saved = localStorage.getItem('sw-lang');
-      if (saved && saved !== 'en') applyLanguage(saved);
-    } catch(e) {}
-  </script>
+    </script>
 </body>
-
 </html>
