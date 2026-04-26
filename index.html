@@ -441,15 +441,20 @@
         left: -100%;
         width: 100%;
         height: calc(100vh - 80px);
-        background: var(--dark-brown);
+        background: rgba(43, 27, 18, 0.98);
+
         flex-direction: column;
         justify-content: start;
-        padding-top: 3rem;
         gap: 2rem;
+
         transition: left 0.4s ease;
         padding: 3rem 2.5rem;
-        /* <- ini bikin gak nempel kiri */
+
         text-align: left;
+
+        /* 🔥 TAMBAHAN PEMISAH VISUAL */
+        border-top: 1px solid rgba(212, 175, 55, 0.2);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
       }
 
       .nav-links li {
