@@ -472,7 +472,7 @@
     <div class="hero-content">
       <h1>SundaWiki</h1>
       <p id="hero-subtitle">Pengetahuan tentang spiritualitas Sunda yang mendalam, elegan, dan abadi.</p>
-      <a href="#pengertian" class="cta-button">Jelajahi Warisan Sunda</a>
+      <a href="#pengertian" class="cta-button" id="cta-button">Jelajahi Warisan Sunda</a>
     </div>
   </section>
 
@@ -633,15 +633,13 @@
       "Sunda bukan hanya suku, melainkan cara hidup yang penuh kebijaksanaan dan harmoni dengan alam semesta."
     </div>
 
-    <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="cta-button"
+    <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="cta-button" id="btn-top"
       style="margin-top: 2rem;">Kembali ke Atas ↑</a>
   </section>
 
   <!-- Footer -->
   <footer>
-    <p>&copy; 2026 SundaWiki • Pengetahuan Spiritualitas Sunda</p>
-    <p style="margin-top: 10px; opacity: 0.7; font-size: 0.9rem;">Memperkenalkan keindahan dan kearifan lokal Sunda
-      kepada dunia</p>
+    <p id="footer-text">&copy; 2026–Present Evan Hendra Mulyadi. All Rights Reserved.</p>
   </footer>
 
   <script>
@@ -705,6 +703,8 @@
         heroSubtitle: "Pengetahuan tentang spiritualitas Sunda yang mendalam, elegan, dan abadi.",
         titlePengertian: "Pengertian Spiritualitas Sunda",
         hubTuhan: "Hubungan dengan Tuhan",
+        btnTop: "Back to Top ↑",
+        footerText: "© 2026–Present Evan Hendra Mulyadi. All Rights Reserved.",
         descTuhan: "Manusia Sunda memandang Tuhan sebagai Sang Hyang Tunggal, pencipta alam semesta. Segala sesuatu berasal dari-Nya dan akan kembali kepada-Nya. Ibadah dilakukan dengan kesadaran penuh melalui doa, syukur, dan menjaga keseimbangan alam.",
         hubAlam: "Hubungan dengan Alam",
         descAlam: "Alam bukanlah objek, melainkan saudara. Gunung, sungai, hutan, dan sawah adalah bagian dari kehidupan spiritual. Menjaga alam berarti menjaga diri sendiri dan keturunan.",
@@ -723,6 +723,7 @@
         baduyDesc2: "Gaya hidup mereka sangat sederhana, menolak teknologi modern, dan sangat menjaga kelestarian alam. Spiritualitas mereka sangat kuat, di mana alam dianggap suci dan harus dijaga dengan ketat.",
         baduyQuote: "Kami tidak merusak alam, karena alam adalah ibu kami.",
         titleHubungan: "Hubungan Baduy dengan Sunda",
+        ctaButton: "Jelajahi Warisan Sunda",
         hubunganDesc: "Suku Baduy merupakan bagian integral dari etnis Sunda. Mereka adalah penjaga asli nilai-nilai spiritual Sunda yang paling murni. Bahasa yang digunakan adalah bahasa Sunda kuno, dan sistem kepercayaan mereka selaras dengan filosofi Sunda secara keseluruhan.",
         hubunganDesc2: "Meskipun Baduy menolak pengaruh luar, nilai-nilai seperti Cageur, Bageur, Bener, Pinter, tur Singer tetap menjadi pondasi kehidupan mereka.",
         titleKesimpulan: "Kesimpulan",
@@ -732,12 +733,15 @@
       en: {
         navPengertian: "DEFINITION",
         navKonsep: "CORE CONCEPT",
+        ctaButton: "Explore Sundanese Heritage",
         navNilai: "5 CORE VALUES",
         navBaduy: "BADUY PEOPLE",
         navKesimpulanMenu: "CONCLUSION",
         heroSubtitle: "Deep, elegant, and timeless knowledge of Sundanese spirituality.",
         titlePengertian: "Understanding Sundanese Spirituality",
         hubTuhan: "Relationship with God",
+        btnTop: "Back to Top ↑",
+        footerText: "© 2026–Present Evan Hendra Mulyadi. All Rights Reserved.",
         descTuhan: "Sundanese people view God as Sang Hyang Tunggal, the Creator of the universe. Everything comes from Him and will return to Him. Worship is done with full awareness through prayer, gratitude, and maintaining the balance of nature.",
         hubAlam: "Relationship with Nature",
         descAlam: "Nature is not an object, but a sibling. Mountains, rivers, forests, and rice fields are part of spiritual life. Protecting nature means protecting oneself and future generations.",
@@ -776,6 +780,7 @@
       document.getElementById('hero-subtitle').innerHTML = t.heroSubtitle;
       document.getElementById('title-pengertian').textContent = t.titlePengertian;
       document.getElementById('hub-tuhan').textContent = t.hubTuhan;
+      document.getElementById('cta-button').textContent = t.ctaButton;
       document.getElementById('desc-tuhan').textContent = t.descTuhan;
       document.getElementById('hub-alam').textContent = t.hubAlam;
       document.getElementById('desc-alam').textContent = t.descAlam;
@@ -797,6 +802,8 @@
       document.getElementById('hubungan-desc').textContent = t.hubunganDesc;
       document.getElementById('hubungan-desc2').innerHTML = t.hubunganDesc2;
       document.getElementById('title-kesimpulan').textContent = t.titleKesimpulan;
+      document.getElementById('btn-top').textContent = t.btnTop;
+      document.getElementById('footer-text').textContent = t.footerText;
       document.getElementById('kesimpulan-desc').textContent = t.kesimpulanDesc;
       document.getElementById('quote').textContent = t.quote;
       document.getElementById('nav-pengertian').textContent = t.navPengertian;
