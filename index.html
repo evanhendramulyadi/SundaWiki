@@ -341,6 +341,22 @@
       transform: scale(1.08);
     }
 
+    .zoom-img {
+      overflow: hidden;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .zoom-img img {
+      width: 100%;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+
+    .zoom-img:hover img {
+      transform: scale(1.08);
+    }
+
     /* Hubungan Baduy & Sunda */
     .hubungan {
       background: var(--medium-brown);
@@ -412,7 +428,7 @@
 
       #hubungan {
         padding-top: 60px;
-        padding-bottom: 60px;
+        padding-bottom: 100px;
       }
 
 
@@ -620,7 +636,7 @@
 
   <!-- SECTION DIVIDER -->
   <!-- SECTION DIVIDER -->
-<div style="
+  <div style="
   height: 10px;
   display: flex;
   align-items: center;
@@ -628,7 +644,7 @@
   overflow: hidden;
 ">
 
-  <div style="
+    <div style="
     width: 85%;
     height: 2px;
     background: linear-gradient(90deg, transparent, #D4AF37, #FFF6D7, #D4AF37, transparent);
@@ -637,7 +653,7 @@
     opacity: 0.9;
   "></div>
 
-</div>
+  </div>
 
   <!-- SUKU BADUY -->
   <section id="baduy" class="baduy-section">
@@ -676,8 +692,9 @@
             Pinter, tur Singer</strong> tetap menjadi pondasi kehidupan mereka.</p>
       </div>
       <div style="text-align: center;">
-        <img src="img/rumah-adat-sunda.jpg" alt="Rumah Adat Sunda"
-          style="border-radius: 20px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+        <div class="zoom-img">
+          <img src="img/rumah-adat-sunda.jpg" alt="Rumah Adat Sunda">
+        </div>
       </div>
     </div>
   </section>
