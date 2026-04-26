@@ -397,9 +397,9 @@
     /* Mobile */
     @media (max-width: 992px) {
 
-
-      #hubungan>div {
-        grid-template-columns: 1fr !important;
+      #hubungan {
+        display: flex;
+        flex-direction: column;
       }
 
       #hubungan img {
@@ -407,54 +407,51 @@
         height: auto;
         display: block;
       }
+  
 
-      #hubungan {
-        gap: 2rem;
-      }
+    .nav-links {
+      position: fixed;
+      top: 80px;
+      left: -100%;
+      width: 100%;
+      height: calc(100vh - 80px);
+      background: var(--dark-brown);
+      flex-direction: column;
+      justify-content: start;
+      padding-top: 3rem;
+      gap: 2rem;
+      transition: left 0.4s ease;
+      padding: 3rem 2.5rem;
+      /* <- ini bikin gak nempel kiri */
+      text-align: left;
+    }
 
-      .nav-links {
-        position: fixed;
-        top: 80px;
-        left: -100%;
-        width: 100%;
-        height: calc(100vh - 80px);
-        background: var(--dark-brown);
-        flex-direction: column;
-        justify-content: start;
-        padding-top: 3rem;
-        gap: 2rem;
-        transition: left 0.4s ease;
-        padding: 3rem 2.5rem;
-        /* <- ini bikin gak nempel kiri */
-        text-align: left;
-      }
+    .nav-links li {
+      width: 100%;
+    }
 
-      .nav-links li {
-        width: 100%;
-      }
+    .nav-links a {
+      display: block;
+      padding: 12px 0;
+      font-size: 1.2rem;
+    }
 
-      .nav-links a {
-        display: block;
-        padding: 12px 0;
-        font-size: 1.2rem;
-      }
+    .nav-links.active {
+      left: 0;
+    }
 
-      .nav-links.active {
-        left: 0;
-      }
+    .hamburger {
+      display: block;
+    }
 
-      .hamburger {
-        display: block;
-      }
+    .hero h1 {
+      font-size: 3.8rem;
+    }
 
-      .hero h1 {
-        font-size: 3.8rem;
-      }
-
-      .baduy-section {
-        grid-template-columns: 1fr;
-        gap: 3rem;
-      }
+    .baduy-section {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
     }
 
     @media (max-width: 768px) {
@@ -624,7 +621,7 @@
   position: relative;
   overflow: hidden;
 ">
-  <div style="
+    <div style="
     width: 85%;
     height: 2px;
     background: #D4AF37;
@@ -632,7 +629,7 @@
     opacity: 0.9;
     border-radius: 999px;
   "></div>
-</div>
+  </div>
 
   <!-- SUKU BADUY -->
   <section id="baduy" class="baduy-section">
