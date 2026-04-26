@@ -397,9 +397,11 @@
     /* Mobile */
     @media (max-width: 992px) {
 
-      #hubungan {
-        display: flex;
-        flex-direction: column;
+
+      #hubungan>div {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
       }
 
       #hubungan img {
@@ -407,51 +409,56 @@
         height: auto;
         display: block;
       }
-  
 
-    .nav-links {
-      position: fixed;
-      top: 80px;
-      left: -100%;
-      width: 100%;
-      height: calc(100vh - 80px);
-      background: var(--dark-brown);
-      flex-direction: column;
-      justify-content: start;
-      padding-top: 3rem;
-      gap: 2rem;
-      transition: left 0.4s ease;
-      padding: 3rem 2.5rem;
-      /* <- ini bikin gak nempel kiri */
-      text-align: left;
-    }
+      #hubungan {
+        padding-top: 60px;
+        padding-bottom: 60px;
+      }
 
-    .nav-links li {
-      width: 100%;
-    }
 
-    .nav-links a {
-      display: block;
-      padding: 12px 0;
-      font-size: 1.2rem;
-    }
+      .nav-links {
+        position: fixed;
+        top: 80px;
+        left: -100%;
+        width: 100%;
+        height: calc(100vh - 80px);
+        background: var(--dark-brown);
+        flex-direction: column;
+        justify-content: start;
+        padding-top: 3rem;
+        gap: 2rem;
+        transition: left 0.4s ease;
+        padding: 3rem 2.5rem;
+        /* <- ini bikin gak nempel kiri */
+        text-align: left;
+      }
 
-    .nav-links.active {
-      left: 0;
-    }
+      .nav-links li {
+        width: 100%;
+      }
 
-    .hamburger {
-      display: block;
-    }
+      .nav-links a {
+        display: block;
+        padding: 12px 0;
+        font-size: 1.2rem;
+      }
 
-    .hero h1 {
-      font-size: 3.8rem;
-    }
+      .nav-links.active {
+        left: 0;
+      }
 
-    .baduy-section {
-      grid-template-columns: 1fr;
-      gap: 3rem;
-    }
+      .hamburger {
+        display: block;
+      }
+
+      .hero h1 {
+        font-size: 3.8rem;
+      }
+
+      .baduy-section {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
     }
 
     @media (max-width: 768px) {
@@ -612,24 +619,25 @@
   </section>
 
   <!-- SECTION DIVIDER -->
-  <div style="
-  height: 140px;
+  <!-- SECTION DIVIDER -->
+<div style="
+  height: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(to bottom, rgba(43,27,18,1), rgba(74,44,26,1));
-  position: relative;
   overflow: hidden;
 ">
-    <div style="
+
+  <div style="
     width: 85%;
     height: 2px;
-    background: #D4AF37;
-    box-shadow: 0 0 25px #D4AF37, 0 0 60px rgba(212,175,55,0.6);
-    opacity: 0.9;
+    background: linear-gradient(90deg, transparent, #D4AF37, #FFF6D7, #D4AF37, transparent);
+    box-shadow: 0 0 50px rgba(212,175,55,0.6);
     border-radius: 999px;
+    opacity: 0.9;
   "></div>
-  </div>
+
+</div>
 
   <!-- SUKU BADUY -->
   <section id="baduy" class="baduy-section">
