@@ -3,262 +3,374 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SundaWiki - Spiritualitas Sunda</title>
+    <title>SundaWiki | Filosofi & Spiritualitas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2c3e50;
-            --accent: #d4a373;
-            --light: #fefae0;
-            --dark: #333;
+            --primary: #1a2a22; /* Hijau hutan gelap */
+            --accent: #b8926a;  /* Emas tembaga */
+            --text-light: #f4f1ea;
+            --bg-soft: #faf9f6;
+            --glass: rgba(255, 255, 255, 0.9);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
         }
 
         body {
-            background-color: var(--light);
-            line-height: 1.6;
-            color: var(--dark);
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-soft);
+            color: var(--primary);
+            overflow-x: hidden;
         }
 
-        /* --- Navbar --- */
+        /* --- Custom Scrollbar --- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-soft); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+        /* --- Navigation --- */
         nav {
-            background: var(--primary);
-            color: white;
-            padding: 1rem 5%;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
+            padding: 1.5rem 8%;
+            position: fixed;
+            width: 100%;
             top: 0;
             z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--accent);
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            text-decoration: none;
+            letter-spacing: 1px;
         }
+
+        .logo span { color: var(--accent); }
 
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 20px;
+            align-items: center;
+            gap: 35px;
         }
 
         .nav-links a {
-            color: white;
             text-decoration: none;
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .lang-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.8rem;
             transition: 0.3s;
         }
 
-        .nav-links a:hover {
-            color: var(--accent);
-        }
+        .lang-toggle:hover { background: var(--accent); transform: translateY(-2px); }
 
         .hamburger {
             display: none;
             cursor: pointer;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: white;
-        }
-
-        .translate-btn {
-            background: var(--accent);
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-weight: bold;
+            font-size: 1.8rem;
         }
 
         /* --- Hero Section --- */
-        header {
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(26, 42, 34, 0.7), rgba(26, 42, 34, 0.7)), 
+                        url('https://images.unsplash.com/photo-1625244724123-1f73b6dd6049?auto=format&fit=crop&q=80&w=1500');
+            background-size: cover;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            padding: 60px 10%;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1590022413150-13459e999905?auto=format&fit=crop&q=80&w=1000') no-repeat center/cover;
-            color: white;
+            color: var(--text-light);
+            padding: 0 20px;
         }
 
-        /* --- Content Sections --- */
-        section {
-            padding: 40px 10%;
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: fadeIn 1.5s ease-out;
         }
 
-        .card-container {
+        .hero p {
+            max-width: 700px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        /* --- Intro Section --- */
+        .section {
+            padding: 100px 15%;
+        }
+
+        .title-block {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .title-block h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .title-block h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        /* --- Grid 5 Poin --- */
+        .pilar-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
         }
 
-        .card {
+        .pilar-card {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border-top: 5px solid var(--accent);
+            padding: 40px;
+            border-radius: 20px;
+            transition: 0.4s;
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.02);
+            border: 1px solid rgba(184, 146, 106, 0.1);
         }
 
-        .baduy-section {
-            background: #e9edc9;
-            border-radius: 15px;
-            padding: 30px;
-            margin-top: 40px;
-        }
-
-        footer {
+        .pilar-card:hover {
+            transform: translateY(-10px);
             background: var(--primary);
             color: white;
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
         }
 
-        /* --- Mobile Responsive --- */
-        @media (max-width: 768px) {
+        .pilar-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        /* --- Baduy Section --- */
+        .baduy-box {
+            display: flex;
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 20px 20px 60px rgba(0,0,0,0.05);
+            align-items: center;
+        }
+
+        .baduy-img {
+            flex: 1;
+            min-height: 450px;
+            background: url('https://images.unsplash.com/photo-1590022413150-13459e999905?auto=format&fit=crop&q=80&w=800') center/cover;
+        }
+
+        .baduy-text {
+            flex: 1;
+            padding: 60px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: var(--primary);
+            color: var(--text-light);
+            padding: 60px 10% 20px;
+            text-align: center;
+        }
+
+        /* --- Mobile Setup --- */
+        @media (max-width: 968px) {
+            .section { padding: 80px 5%; }
+            .hero h1 { font-size: 2.5rem; }
+            .baduy-box { flex-direction: column; }
             .nav-links {
                 display: none;
                 flex-direction: column;
                 position: absolute;
-                top: 60px;
+                top: 80px;
                 left: 0;
                 width: 100%;
-                background: var(--primary);
-                padding: 20px;
-                text-align: center;
+                background: white;
+                padding: 40px;
+                gap: 20px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             }
+            .nav-links.active { display: flex; }
+            .hamburger { display: block; }
+        }
 
-            .nav-links.active {
-                display: flex;
-            }
-
-            .hamburger {
-                display: flex;
-            }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo">SundaWiki</div>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="#filosofi">Filosofi</a></li>
-            <li><a href="#pancaniti">5 Prinsip</a></li>
-            <li><a href="#baduy">Suku Baduy</a></li>
-            <li><button class="translate-btn" onclick="toggleLanguage()" id="langBtn">Translate to English</button></li>
+        <a href="#" class="logo">Sunda<span>Wiki</span></a>
+        <ul class="nav-links" id="menu">
+            <li><a href="#home" class="tr" data-id="m1">Beranda</a></li>
+            <li><a href="#filosofi" class="tr" data-id="m2">Filosofi</a></li>
+            <li><a href="#pilar" class="tr" data-id="m3">5 Pilar</a></li>
+            <li><a href="#baduy" class="tr" data-id="m4">Masyarakat Baduy</a></li>
+            <li><button class="lang-toggle" onclick="changeLang()" id="langBtn">EN | English</button></li>
         </ul>
-        <div class="hamburger" onclick="toggleMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
     </nav>
 
-    <header>
-        <h1 id="heroTitle">Spiritualitas Masyarakat Sunda</h1>
-        <p id="heroSub">Menelusuri jejak kearifan lokal yang abadi dalam harmoni alam.</p>
+    <header class="hero" id="home">
+        <h1 class="tr" data-id="h1">Jatidiri Spiritualitas Sunda</h1>
+        <p class="tr" data-id="h2">Mengenal kedalaman nilai luhur masyarakat Jawa Barat yang harmonis dengan alam dan kemanusiaan.</p>
     </header>
 
-    <section id="filosofi">
-        <h2 id="sec1Title">Dasar Spiritualitas Sunda</h2>
-        <p id="sec1Content">
-            Spiritualitas Sunda bukan sekadar ritual, melainkan pandangan hidup yang menekankan harmoni antara manusia, alam, dan Sang Pencipta (Gusti Nu Maha Suci). Inti dari nilai ini adalah menjaga keseimbangan kosmos melalui perilaku sehari-hari. 
-            <br><br>
-            Nilai spiritualitas Sunda yang paling legendaris terangkum dalam lima konsep utama: 
-            <strong>Cageur, Bageur, Bener, Pinter, tur Singer.</strong>
-        </p>
-    </section>
-
-    <section id="pancaniti">
-        <h2 id="sec2Title">5 Pilar Karakter (Panca Niti)</h2>
-        <div class="card-container">
-            <div class="card">
-                <h3>Cageur</h3>
-                <p id="c1">Sehat secara fisik, mental, dan cara berpikir.</p>
-            </div>
-            <div class="card">
-                <h3>Bageur</h3>
-                <p id="c2">Memiliki akhlak mulia dan suka menolong sesama.</p>
-            </div>
-            <div class="card">
-                <h3>Bener</h3>
-                <p id="c3">Menjalankan hidup di jalan yang lurus dan jujur.</p>
-            </div>
-            <div class="card">
-                <h3>Pinter</h3>
-                <p id="c4">Memiliki ilmu pengetahuan dan bijak menggunakannya.</p>
-            </div>
-            <div class="card">
-                <h3>Singer</h3>
-                <p id="c5">Mawas diri, teliti, dan cekatan dalam bekerja.</p>
-            </div>
+    <section class="section" id="filosofi">
+        <div class="title-block">
+            <h2 class="tr" data-id="s1t">Hakikat Spiritualitas</h2>
         </div>
-    </section>
-
-    <section id="baduy">
-        <div class="baduy-section">
-            <h2 id="baduyTitle">Suku Baduy: Penjaga Amanah</h2>
-            <p id="baduyContent">
-                Salah satu representasi nyata dari penerapan 5 poin spiritualitas di atas adalah <strong>Suku Baduy</strong> di Banten. Meskipun secara administratif berada di provinsi yang berbeda, Suku Baduy merupakan bagian integral dari rumpun masyarakat Sunda (Sunda Wiwitan). 
+        <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+            <p class="tr" data-id="s1p">
+                Masyarakat Sunda memiliki pandangan hidup yang berakar pada keselarasan. Spiritualitas bagi urang Sunda bukan sekadar hubungan vertikal dengan Tuhan, namun juga hubungan horizontal dengan sesama manusia (*silih asah, silih asih, silih asuh*) dan alam semesta. 
                 <br><br>
-                Hubungan keduanya sangat erat; Baduy dianggap sebagai kelompok yang masih memegang teguh "Pikukuh" atau aturan adat leluhur Sunda kuno tanpa pengaruh modernisasi. Mereka adalah bukti hidup bagaimana konsep *Bener* dan *Singer* diterapkan dalam menjaga kelestarian alam.
+                Intisari dari seluruh ajaran karakter ini bermuara pada satu rangkaian prinsip yang menjadi standar moralitas tertinggi bagi setiap individu Sunda, yang dikenal sebagai:
             </p>
+            <h3 style="margin-top: 30px; font-style: italic; color: var(--accent); font-size: 1.8rem;">
+                "Cageur, Bageur, Bener, Pinter, tur Singer"
+            </h3>
         </div>
     </section>
 
-    <section>
-        <h2 id="conclTitle">Kesimpulan</h2>
-        <p id="conclContent">
-            Spiritualitas Sunda mengajarkan bahwa kesempurnaan hidup dicapai bukan melalui materi, melainkan melalui kualitas diri (Cageur-Bageur) yang bermanfaat bagi lingkungan sekitarnya. Melestarikan nilai ini adalah cara kita menjaga identitas di tengah arus zaman.
+    <section class="section" id="pilar" style="background: #f0eee9;">
+        <div class="title-block">
+            <h2 class="tr" data-id="s2t">Panca Niti: 5 Pilar Karakter</h2>
+        </div>
+        <div class="pilar-grid">
+            <div class="pilar-card">
+                <h3>Cageur</h3>
+                <p class="tr" data-id="p1">Sehat fisik, mental, dan cara berpikir. Orang yang *cageur* memiliki keseimbangan antara raga yang kuat dan jiwa yang tenang.</p>
+            </div>
+            <div class="pilar-card">
+                <h3>Bageur</h3>
+                <p class="tr" data-id="p2">Berarti baik hati. Tidak hanya patuh pada aturan, tetapi memiliki empati tinggi dan senang berbagi kebahagiaan dengan sesama.</p>
+            </div>
+            <div class="pilar-card">
+                <h3>Bener</h3>
+                <p class="tr" data-id="p3">Integritas adalah kunci. Selalu berjalan di atas kebenaran, jujur pada diri sendiri, dan tidak merugikan hak-hak orang lain.</p>
+            </div>
+            <div class="pilar-card">
+                <h3>Pinter</h3>
+                <p class="tr" data-id="p4">Cerdas dan berilmu. Menggunakan akal budi untuk mencari solusi, bukan untuk menipu atau menjatuhkan sesama.</p>
+            </div>
+            <div class="pilar-card">
+                <h3>Singer</h3>
+                <p class="tr" data-id="p5">Mawas diri dan cekatan. Memiliki etos kerja tinggi, teliti, dan selalu tanggap terhadap situasi di sekitarnya.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="baduy">
+        <div class="baduy-box">
+            <div class="baduy-img"></div>
+            <div class="baduy-text">
+                <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 20px;" class="tr" data-id="b1">Suku Baduy: Cermin Kejujuran</h2>
+                <p class="tr" data-id="b2">
+                    Jika kita mencari bukti nyata penerapan nilai *Cageur, Bageur, Bener, Pinter, tur Singer*, maka <strong>Suku Baduy</strong> (Urang Kanekes) adalah jawabannya. 
+                    <br><br>
+                    Secara antropologis, masyarakat Baduy adalah bagian dari rumpun Sunda yang memilih untuk mengisolasi diri demi menjaga kemurnian ajaran leluhur. Mereka memegang teguh *Pikukuh* yang melarang pengrusakan alam. Hubungan Suku Baduy dan Sunda adalah satu akar budaya; mereka adalah penjaga spiritualitas Sunda Wiwitan yang paling autentik hingga saat ini.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="text-align: center;">
+        <h2 class="tr" data-id="f1">Simpulan</h2>
+        <p style="max-width: 800px; margin: 20px auto;" class="tr" data-id="f2">
+            Menjadi Sunda berarti menjadi manusia yang "nyunda"—sebuah proses terus menerus untuk memperbaiki diri. Nilai-nilai di atas adalah kompas moral yang tak lekang oleh zaman, membimbing kita untuk tetap bijak di tengah modernitas yang kian cepat.
         </p>
     </section>
 
     <footer>
-        <p>&copy; 2026 SundaWiki. Dibuat dengan bangga.</p>
+        <p>&copy; 2026 SundaWiki Project | Est. 2026</p>
+        <p style="font-size: 0.8rem; margin-top: 10px; opacity: 0.6;">Melestarikan Nilai Budaya Melalui Teknologi</p>
     </footer>
 
     <script>
-        // Toggle Hamburger Menu
         function toggleMenu() {
-            const navLinks = document.getElementById('navLinks');
-            navLinks.classList.toggle('active');
+            document.getElementById('menu').classList.toggle('active');
         }
 
-        // Feature Translate Sederhana
-        let isEnglish = false;
-        function toggleLanguage() {
-            isEnglish = !isEnglish;
-            const btn = document.getElementById('langBtn');
-            
-            if (isEnglish) {
-                btn.innerText = "Terjemah ke Indonesia";
-                document.getElementById('heroTitle').innerText = "Spirituality of Sundanese People";
-                document.getElementById('heroSub').innerText = "Tracing the footsteps of eternal local wisdom in nature's harmony.";
-                document.getElementById('sec1Title').innerText = "Basics of Sundanese Spirituality";
-                document.getElementById('sec2Title').innerText = "5 Pillars of Character";
-                document.getElementById('baduyTitle').innerText = "Baduy Tribe: The Guardians";
-                document.getElementById('conclTitle').innerText = "Conclusion";
-                document.getElementById('c1').innerText = "Healthy physically, mentally, and in way of thinking.";
-                document.getElementById('c2').innerText = "Having noble character and helping others.";
-                document.getElementById('c3').innerText = "Living life on a straight and honest path.";
-                document.getElementById('c4').innerText = "Possessing knowledge and using it wisely.";
-                document.getElementById('c5').innerText = "Introspective, meticulous, and agile at work.";
-            } else {
-                btn.innerText = "Translate to English";
-                location.reload(); // Refresh untuk kembali ke bahasa asal
+        const dict = {
+            id: {
+                m1: "Beranda", m2: "Filosofi", m3: "5 Pilar", m4: "Masyarakat Baduy",
+                h1: "Jatidiri Spiritualitas Sunda", h2: "Mengenal kedalaman nilai luhur masyarakat Jawa Barat yang harmonis dengan alam dan kemanusiaan.",
+                s1t: "Hakikat Spiritualitas", s1p: "Masyarakat Sunda memiliki pandangan hidup yang berakar pada keselarasan...",
+                s2t: "Panca Niti: 5 Pilar Karakter", 
+                p1: "Sehat fisik, mental, dan cara berpikir. Orang yang *cageur* memiliki keseimbangan antara raga yang kuat dan jiwa yang tenang.",
+                p2: "Berarti baik hati. Tidak hanya patuh pada aturan, tetapi memiliki empati tinggi dan senang berbagi kebahagiaan dengan sesama.",
+                p3: "Integritas adalah kunci. Selalu berjalan di atas kebenaran, jujur pada diri sendiri, dan tidak merugikan hak-hak orang lain.",
+                p4: "Cerdas dan berilmu. Menggunakan akal budi untuk mencari solusi, bukan untuk menipu atau menjatuhkan sesama.",
+                p5: "Mawas diri dan cekatan. Memiliki etos kerja tinggi, teliti, dan selalu tanggap terhadap situasi di sekitarnya.",
+                b1: "Suku Baduy: Cermin Kejujuran", b2: "Jika kita mencari bukti nyata penerapan nilai ini, maka Suku Baduy adalah jawabannya...",
+                f1: "Simpulan", f2: "Menjadi Sunda berarti menjadi manusia yang 'nyunda'..."
+            },
+            en: {
+                m1: "Home", m2: "Philosophy", m3: "5 Pillars", m4: "Baduy People",
+                h1: "The Essence of Sundanese Spirituality", h2: "Understanding the depth of noble values of West Javanese people in harmony with nature and humanity.",
+                s1t: "The Essence of Spirituality", s1p: "Sundanese people have a life view rooted in harmony. Spirituality for them is not just a vertical relationship with God, but also horizontal with fellow humans and the universe.",
+                s2t: "Panca Niti: The 5 Pillars of Character", 
+                p1: "Healthy physically, mentally, and in thinking. A 'cageur' person maintains balance between a strong body and a calm soul.",
+                p2: "Means being kind-hearted. Not just following rules, but having high empathy and sharing happiness with others.",
+                p3: "Integrity is key. Always walking on the path of truth, being honest with oneself, and not harming the rights of others.",
+                p4: "Smart and knowledgeable. Using wisdom to find solutions, not to deceive or bring others down.",
+                p5: "Self-aware and agile. Having a high work ethic, meticulousness, and always responsive to the surroundings.",
+                b1: "Baduy Tribe: Mirror of Honesty", b2: "If we seek real proof of these values, the Baduy Tribe (Urang Kanekes) is the answer. They are an integral part of the Sundanese group who chose to preserve pure ancestral teachings.",
+                f1: "Conclusion", f2: "To be Sundanese is to be 'nyunda'—a continuous process of self-improvement through moral guidance."
             }
+        };
+
+        let currentLang = 'id';
+        function changeLang() {
+            currentLang = currentLang === 'id' ? 'en' : 'id';
+            document.getElementById('langBtn').innerText = currentLang === 'id' ? "EN | English" : "ID | Indonesia";
+            
+            document.querySelectorAll('.tr').forEach(el => {
+                const id = el.getAttribute('data-id');
+                el.innerText = dict[currentLang][id];
+            });
         }
     </script>
 </body>
