@@ -267,8 +267,15 @@
     /* Nilai Utama */
     .nilai-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 2rem;
+    }
+
+    /* card terakhir (Singer) jadi full width */
+    .nilai-card:nth-child(5) {
+      grid-column: 1 / -1;
+      max-width: 600px;
+      justify-self: center;
     }
 
     .nilai-card {
@@ -437,6 +444,16 @@
     @media (max-width: 768px) {
       section {
         padding: 80px 5%;
+
+      }
+
+      .nilai-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nilai-card:nth-child(5) {
+        grid-column: auto;
+        max-width: 100%;
       }
     }
   </style>
@@ -580,6 +597,22 @@
       </div>
     </div>
   </section>
+
+<!-- SECTION DIVIDER -->
+<div style="
+  height: 120px;
+  background: linear-gradient(to bottom, rgba(43,27,18,1), rgba(74,44,26,1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+">
+  <div style="
+    width: 80%;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #D4AF37, transparent);
+    opacity: 0.6;
+  "></div>
+</div>
 
   <!-- SUKU BADUY -->
   <section id="baduy" class="baduy-section">
